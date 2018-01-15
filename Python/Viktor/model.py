@@ -46,7 +46,13 @@ class Sugarscape2ConstantGrowback(Model):
 
         # Create sugar
         import numpy as np
-        sugar_distribution = np.genfromtxt("sugarscape/sugar-map.txt")
+        # sugar_distribution = np.genfromtxt("sugarscape/sugar-map.txt")
+        sugar_distribution = np.zeros([self.height,self.width])
+        for x in range(self.height):
+            for y in range(self.width):
+                
+        sugar_distribution[1,5] = 3
+        print(sugar_distribution)
         for _, x, y in self.grid.coord_iter():
             max_sugar = sugar_distribution[x, y]
             sugar = Sugar((x, y), self, max_sugar)
