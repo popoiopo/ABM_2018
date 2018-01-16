@@ -53,17 +53,9 @@ class SsAgent(Agent):
         random.shuffle(final_candidates)
         self.model.grid.move_agent(self, final_candidates[0])
 
-    def eat(self):
-        sugar_patch = self.get_sugar(self.pos)
-        self.sugar = self.sugar - self.metabolism + sugar_patch.amount
-        sugar_patch.amount = 0
 
     def step(self):
         self.move()
-        self.eat()
-        if self.sugar <= 0:
-            self.model.grid._remove_agent(self.pos, self)
-            self.model.schedule.remove(self)
 
 
 class Sugar(Agent):
@@ -73,4 +65,4 @@ class Sugar(Agent):
         self.max_sugar = max_sugar
 
     def step(self):
-        self.amount = min([self.max_sugar, self.amount + 1])
+        self.amount = self.max_sugar

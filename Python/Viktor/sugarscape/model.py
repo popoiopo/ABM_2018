@@ -27,7 +27,7 @@ class Sugarscape2ConstantGrowback(Model):
     verbose = True  # Print-monitoring
 
     def __init__(self, height=50, width=50,
-                 initial_population=100):
+                 initial_population=320):
         '''
         Create a new Constant Growback model with the given parameters.
 
@@ -47,26 +47,26 @@ class Sugarscape2ConstantGrowback(Model):
         # Create sugar
         import numpy as np
         # sugar_distribution = np.genfromtxt("sugarscape/sugar-map.txt")
-        sugar_distribution = np.zeros([self.height,self.width])
-        for x in range(self.height):
-            for y in range(self.width):
-                
-        sugar_distribution[1,5] = 3
-        print(sugar_distribution)
+        """sugar_distribution = np.zeros([self.height,self.width])
+        for x in range(self.width):
+            for y in range(self.height):
+                sugar_distribution[x,y] = (y/(49/7)) + ((25-abs(25-x))/8)
+    
+    
         for _, x, y in self.grid.coord_iter():
             max_sugar = sugar_distribution[x, y]
             sugar = Sugar((x, y), self, max_sugar)
             self.grid.place_agent(sugar, (x, y))
             self.schedule.add(sugar)
-
+        """
         # Create agent:
         for i in range(self.initial_population):
             x = random.randrange(self.width)
             y = random.randrange(self.height)
             sugar = random.randrange(6, 25)
             metabolism = random.randrange(2, 4)
-            vision = random.randrange(1, 6)
-            ssa = SsAgent((x, y), self, False, sugar, metabolism, vision)
+            vision = 1
+            ssa = SsAgent((x, y), self, True, sugar, metabolism, vision)
             self.grid.place_agent(ssa, (x, y))
             self.schedule.add(ssa)
 

@@ -4,10 +4,16 @@ from mesa.visualization.modules import CanvasGrid, ChartModule
 from sugarscape.agents import SsAgent, Sugar
 from sugarscape.model import Sugarscape2ConstantGrowback
 
-color_dic = {4: "#005C00",
-             3: "#008300",
-             2: "#00AA00",
-             1: "#00F800"}
+color_dic = {10: "#042E04",
+             9: "#064506",
+             8: "#075907",
+             7: "#097009",
+             6: "#098209",
+             5: "#0B9C0B",
+             4: "#0DAB0D",
+             3: "#0EC40E",
+             2: "#0FD60F",
+             1: "#11EB11"}
 
 
 def SsAgent_portrayal(agent):
@@ -22,8 +28,8 @@ def SsAgent_portrayal(agent):
         portrayal["Layer"] = 1
 
     elif type(agent) is Sugar:
-        if agent.amount != 0:
-            portrayal["Color"] = color_dic[agent.amount]
+        if agent.amount > 1.0:
+            portrayal["Color"] = color_dic[int(agent.amount)]
         else:
             portrayal["Color"] = "#D6F5D6"
         portrayal["Shape"] = "rect"
