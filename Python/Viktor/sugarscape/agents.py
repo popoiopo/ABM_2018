@@ -69,21 +69,28 @@ class SsAgent(Agent):
         # Find best place to go
         def score(pos):
             x,y = pos
-            if 14 <= x <= 36:
-                xpod = 24.5
+            if abs(x-((self.model.width-1)/2)) < 10:
+                xpod = (self.model.width-1)/2
             else:
                 xpod = x
-            score = 1.5*y + 24.5 - abs(xpod - 24.5)
+            score = 1.5*y + (self.model.width-1)/2 - abs(xpod - (self.model.width-1)/2)
             return score
         
         if len(neighbors) == 1:
-            candidate = neighbors
+            final_candidates = neighbors
         else:
             best_score =  max([score(pos) for pos in neighbors[:-1]])
-            candidate = [pos for pos in neighbors if score(pos)==
+            candidates = [pos for pos in neighbors if score(pos)==
                     best_score]
+            min_dist = min([get_distance(self.pos, pos) for pos in candidates])
+            final_candidates = [pos for pos in candidates if get_distance(self.pos,
+                pos) == min_dist]
+        
+            random.shuffle(final_candidates)
+        
+        self.model.grid.move_agent(self, final_candidates[0])
 
-        self.model.grid.move_agent(self, candidate[0])
+        #self.model.grid.move_agent(self, candidate[0])
     
     
     def move2(self):
@@ -95,15 +102,15 @@ class SsAgent(Agent):
         max_sugar = max([self.get_sugar(pos).amount for pos in neighbors])
         candidates = [pos for pos in neighbors if self.get_sugar(pos).amount ==
                 max_sugar]
-        """
+        
         # Narrow down to the nearest ones
         min_dist = min([get_distance(self.pos, pos) for pos in candidates])
         final_candidates = [pos for pos in candidates if get_distance(self.pos,
             pos) == min_dist]
-        """
-        random.shuffle(candidates)
         
-        self.model.grid.move_agent(self, candidates[0])
+        random.shuffle(final_candidates)
+        
+        self.model.grid.move_agent(self, final_candidates[0])
 
     def eat(self):
         (x,y) = self.pos
