@@ -100,14 +100,15 @@ class SsAgent(Agent):
                 xpod = (self.model.width-1)/2
             else:
                 xpod = x
-            score = 4*y + (self.model.width-1)/2 - abs(xpod - (self.model.width-1)/2)
+            #score = (y)**2 + ((self.model.width-1)/2 - abs(xpod - (self.model.width-1)/2))**2
+            score = (1.5*abs(y-99))**2 + abs(xpod-49.5)**2
             return score
         
         # Choose best place
         if len(neighbors) == 1:
             final_candidates = neighbors
         else:
-            best_score =  max([score(pos) for pos in neighbors])
+            best_score =  min([score(pos) for pos in neighbors])
             candidates = [pos for pos in neighbors if score(pos)==
                     best_score]
             min_dist = min([get_distance(self.pos, pos) for pos in candidates])
