@@ -26,8 +26,8 @@ class Sugarscape2ConstantGrowback(Model):
 
     verbose = True  # Print-monitoring
 
-    def __init__(self, height=50, width=50,
-                 initial_population=320):
+    def __init__(self, height=100, width=100,
+                 initial_population=1000):
         '''
         Create a new Constant Growback model with the given parameters.
 
@@ -65,7 +65,7 @@ class Sugarscape2ConstantGrowback(Model):
             y = random.randrange(self.height)
             sugar = random.randrange(6, 25)
             metabolism = random.randrange(2, 4)
-            vision = 1
+            vision = 5
             ssa = SsAgent((x, y), self, True, sugar, metabolism, vision)
             self.grid.place_agent(ssa, (x, y))
             self.schedule.add(ssa)
