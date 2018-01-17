@@ -22,8 +22,7 @@ class SsAgent(Agent):
     def __init__(self, pos, model, moore=True, sugar=0, metabolism=0, vision=0):
         super().__init__(pos, model)
         self.pos = pos
-
-        
+        self.model = model
         self.moore = moore
         self.sugar = sugar
         self.metabolism = metabolism
@@ -41,14 +40,15 @@ class SsAgent(Agent):
         pos2 = (x-1,y)
         pos3 = (x,y+1)
         pos4 = (x,y-1)
+        
         if x == 0:
-            pos2 = (x,y)
-        elif x == 49:
-            pos1 = (x,y)
+            pos2 = (x+1,y)
+        elif x == (self.model.width-1):
+            pos1 = (x-1,y)
         if y == 0:
-            pos4 = (x,y)
-        elif y == 49:
-            pos3 = (x,y)
+            pos4 = (x,y+1)
+        elif y == (self.model.height-1):
+            pos3 = (x,y-1)
     
         this_cell = self.model.grid.get_cell_list_contents([pos,pos1, pos2, pos3, pos4])
         return len(this_cell) > 1
@@ -60,23 +60,30 @@ class SsAgent(Agent):
         neighbors = []
         for dx in range(-1,2):
             for dy in range(-1,2):
-                if x+dx >= 0 and x+dx < 50 and y+dy >= 0 and y+dy < 50:
+                if x+dx >= 0 and x+dx < self.model.width and y+dy >= 0 and y+dy < self.model.height:
                     pos = (x+dx,y+dy)
+                    #if dx == 0 or dy == 0
                     if not self.is_occupied(pos):
                         neighbors.append(pos)
         neighbors.append(self.pos)
         # Find best place to go
         def score(pos):
             x,y = pos
-            score = 1.5 * y + 24.5 - abs(x - 24.5)
+            if 14 <= x <= 36:
+                xpod = 24.5
+            else:
+                xpod = x
+            score = 1.5*y + 24.5 - abs(xpod - 24.5)
             return score
-            
-        best_score =  max([score(pos) for pos in neighbors])
-        candidate = [pos for pos in neighbors if score(pos)==
-                best_score]
+        
+        if len(neighbors) == 1:
+            candidate = neighbors
+        else:
+            best_score =  max([score(pos) for pos in neighbors[:-1]])
+            candidate = [pos for pos in neighbors if score(pos)==
+                    best_score]
 
         self.model.grid.move_agent(self, candidate[0])
-    
     
     
     def move2(self):
