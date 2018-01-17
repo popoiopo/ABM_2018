@@ -37,6 +37,7 @@ class SsAgent(Agent):
     def is_occupied(self, pos):
     
         # All 1st neighbors
+        
         (x,y) = pos
         pos1 = (x+1,y)
         pos2 = (x+1,y+1)
@@ -68,6 +69,7 @@ class SsAgent(Agent):
             pos7 = (x,y-1)
     
         this_cell = self.model.grid.get_cell_list_contents([pos,pos1, pos2, pos3, pos4, pos5, pos6, pos7, pos8])
+        
         return len(this_cell)
 
 
