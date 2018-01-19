@@ -19,7 +19,7 @@ def get_distance(pos_1, pos_2):
 
 
 class SsAgent(Agent):
-    def __init__(self, pos, model, moore=True, sugar=0, metabolism=0, vision=0, count=0):
+    def __init__(self, pos, model, moore=True, sugar=0, metabolism=0, vision=0, count=0, thirst=False, pee=False, countp=0):
         super().__init__(pos, model)
         self.pos = pos
 
@@ -29,6 +29,9 @@ class SsAgent(Agent):
         self.metabolism = metabolism
         self.vision = vision
         self.count = count
+        self.thirst = thirst
+        self.pee = pee
+        self.countp = countp
 
     def get_sugar(self, pos):
         this_cell = self.model.grid.get_cell_list_contents([pos])
@@ -70,11 +73,36 @@ class SsAgent(Agent):
         def score(pos):
             x,y = pos
             score = 1.5 * y + 24.5 - abs(x - 24.5)
-            return score
+            score_bar = 1.5 * x + 24.5 - abs(y - 24.5) 
+            score_p = 1.5 * x + 24.5 + abs(y - 24.5)
+            return score, score_bar, score_p
+        
+        if self.pee == True:   
+            best_score =  max([score(pos)[2] for pos in neighbors])
+            candidate = [pos for pos in neighbors if score(pos)[2]==
+                    best_score]
+            if best_score > 80:
+                print('piss', best_score)
+                self.pee = False
+                print(self.thirst) 
+                self.countpp = 0
+                print(self.count)
+
+        elif self.thirst == True:   
+            best_score =  max([score(pos)[1] for pos in neighbors])
+            candidate = [pos for pos in neighbors if score(pos)[1]==
+                    best_score]
+            if best_score > 80:
+                print('thirsty', best_score)
+                self.thirst = False
+                print(self.thirst) 
+                self.count = 0
+                print(self.count)
+        else:    
+            best_score =  max([score(pos)[0] for pos in neighbors])
+            candidate = [pos for pos in neighbors if score(pos)[0]==
+                    best_score]
             
-        best_score =  max([score(pos) for pos in neighbors])
-        candidate = [pos for pos in neighbors if score(pos)==
-                best_score]
 
         self.model.grid.move_agent(self, candidate[0])
     
@@ -86,9 +114,14 @@ class SsAgent(Agent):
                 False, radius=self.vision) if not self.is_occupied(i)]
         neighbors.append(self.pos)
         # Look for location with the most sugar
-        max_sugar = max([self.get_sugar(pos).amount for pos in neighbors])
-        candidates = [pos for pos in neighbors if self.get_sugar(pos).amount ==
-                max_sugar]
+        if self.thirst == False:
+            max_sugar = max([self.get_sugar(pos).amount for pos in neighbors])
+            candidates = [pos for pos in neighbors if self.get_sugar(pos).amount ==
+                    max_sugar]
+        if self.thirst == True:
+            max_sugar = min([self.get_sugar(pos).amount for pos in neighbors])
+            candidates = [pos for pos in neighbors if self.get_sugar(pos).amount ==
+                    max_sugar]
         """
         # Narrow down to the nearest ones
         min_dist = min([get_distance(self.pos, pos) for pos in candidates])
@@ -98,6 +131,9 @@ class SsAgent(Agent):
         random.shuffle(candidates)
         
         self.model.grid.move_agent(self, candidates[0])
+        print(candidates[0], "kaaaaaaaaaaaaaaaaaaaaan")
+        if candidates[0] >=60:
+            self.thirsty == False
 
     def eat(self):
         (x,y) = self.pos
@@ -153,14 +189,21 @@ class SsAgent(Agent):
         #self.eat()
         
         rand = random.randint(0, 10)
-        print(rand)
-        if rand > 5:
+        randp = random.randint(0, 10)
+        #print(rand)
+        if rand > 8:
             self.count += 1
-        print(self.count, "count")
-        if self.count == 20:
+        if randp > 8:
+            self.count += 1
+        #print(self.count, "count")
+        if self.countp == 40:
             print('bar')
-            self.model.grid._remove_agent(self.pos, self)
-            self.model.schedule.remove(self)
+            #self.model.grid._remove_agent(self.pos, self)
+            #self.model.schedule.remove(self)
+            self.thirst = True
+        if self.countp == 30:
+            self.pee = True
+
 
 class Sugar(Agent):
     def __init__(self, pos, model, max_sugar):
