@@ -30,7 +30,7 @@ class commuterAgent(Agent):
             moore=True,
             include_center=False)
 
-        cost_pos_list = []
+        cost_pos_list = [(100,self.pos)]
        
         for i in range(len(possible_steps)):
             
@@ -47,7 +47,7 @@ class commuterAgent(Agent):
                                      
 
         best_cost = min(cost_pos_list, key=lambda x:x[0])[0]
-        candidate_list =[(100,self.pos)]
+        candidate_list =[]
 
         #candidate_list = sorted([candidate_list, key=lambda x: x[0])                
 
