@@ -48,6 +48,6 @@ grid = CanvasGrid(agent_portrayal, 50, 50, 600, 600)
 server = ModularServer(Model,
                        [grid],
                        "ABM Project",
-                       {"N": 50, "width": 50, "height": 50})
+                       {"N": 100, "width": 50, "height": 50})
 
 

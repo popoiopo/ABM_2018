@@ -38,7 +38,9 @@ def A_star(self, location_point,location_name,blocks):
             for agent in this_cell:
                     if type(agent) is nodeAgent:
                         if  agent.block == False and agent.locations[location_name] == -1:
-                            agent.locations[location_name] = m_range 
+                            dist = get_distance(location_point,neighbor_positions[i])
+
+                            agent.locations[location_name] = m_range + 0.5 * dist
 
 
     while(True):
@@ -65,8 +67,9 @@ def A_star(self, location_point,location_name,blocks):
                 for agent in this_cell:
                     if   type(agent) is nodeAgent:
                         if agent.block == False and agent.locations[location_name] == -1:
-                        
-                            agent.locations[location_name] = m_range  
+
+                            dist = get_distance(location_point,neighbor_positions[i])
+                            agent.locations[location_name] = m_range + 0.5 * dist
             
         if len(node_list) == 0:
             return
@@ -129,12 +132,13 @@ class Model(Model):
         block3 =[(20+i,20) for i in range(10)]
         block4= [(20,41),(20,42),(20,43),(20,44)]
         block5 =[(25,20+i) for i in range(10)]
-        block5 =[(25,10+i) for i in range(10)]
-        block6 =[(15,30+i) for i in range(10)]
-
+        block6 =[(25,10+i) for i in range(10)]
+        block7 =[(10,0+i) for i in range(10)]
+        block8 =[(0+i,30) for i in range(10)]
+        block9 =[(35+i,30) for i in range(10)]
 
         blocks =[]
-        for b in [block1,block2,block3,block4,block5,block6]:
+        for b in [block1,block2,block3,block4,block5,block6,block7,block8,block9]:
             for e in b:
                 blocks.append(e)
 
