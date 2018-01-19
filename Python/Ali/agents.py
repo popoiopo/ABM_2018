@@ -30,24 +30,24 @@ class commuterAgent(Agent):
             moore=True,
             include_center=False)
 
-        cost_pos_list = [self.pos]
-        candidate_list =[]
+        cost_pos_list = []
+       
         for i in range(len(possible_steps)):
             
             this_cell = self.model.grid.get_cell_list_contents(possible_steps[i])
             for agent in this_cell:
 
                     if type(agent) is type(self):
-                        break
-                
+                       break
+                        
                     if type(agent) is nodeAgent:
                     
                         if agent.locations[destination]:
                             cost_pos_list.append( (agent.locations[destination], possible_steps[i]) )
-                            
+                                     
 
-        best_cost =min(cost_pos_list, key=lambda x:x[0])[0]
-        candidate_list =[]
+        best_cost = min(cost_pos_list, key=lambda x:x[0])[0]
+        candidate_list =[(100,self.pos)]
 
         #candidate_list = sorted([candidate_list, key=lambda x: x[0])                
 
