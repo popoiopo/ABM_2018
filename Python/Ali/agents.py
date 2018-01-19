@@ -30,7 +30,7 @@ class commuterAgent(Agent):
             moore=True,
             include_center=False)
 
-        cost_pos_list = []
+        cost_pos_list = [self.pos]
         candidate_list =[]
         for i in range(len(possible_steps)):
             
