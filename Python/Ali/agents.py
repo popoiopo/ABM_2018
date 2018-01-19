@@ -36,6 +36,9 @@ class commuterAgent(Agent):
             
             this_cell = self.model.grid.get_cell_list_contents(possible_steps[i])
             for agent in this_cell:
+
+                    if type(agent) is type(self):
+                        break
                 
                     if type(agent) is nodeAgent:
                     
