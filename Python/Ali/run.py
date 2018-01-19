@@ -7,9 +7,8 @@ from server import server
 
 
 # sys.path.append('')
-from  model import MoneyModel
-from model import MoneyAgent
-from model import compute_gini
+
+
 
 #model = MoneyModel(50, 10, 10)
 #for i in range(100):
