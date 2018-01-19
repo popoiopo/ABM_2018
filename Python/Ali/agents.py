@@ -51,7 +51,7 @@ class commuterAgent(Agent):
         for k in range(len(cost_pos_list)):
             if cost_pos_list[k][0] == best_cost:
                 candidate_list.append(cost_pos_list[k]) 
-
+                
         random.shuffle(candidate_list)
         new_position = candidate_list[0][1]
         self.model.grid.move_agent(self, new_position)
