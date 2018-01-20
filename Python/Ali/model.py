@@ -24,6 +24,12 @@ def A_star(self, location_point,location_name,blocks):
     node_list =[]
     check_list =[]
 
+    this_cell = self.grid.get_cell_list_contents(pos)
+    for agent in this_cell:
+          if  agent.block == False and agent.locations[location_name] == -1:
+                agent.locations[location_name] = 0
+
+
     neighbor_positions = self.grid.get_neighborhood(
             pos,
             moore=True,
@@ -40,7 +46,7 @@ def A_star(self, location_point,location_name,blocks):
                         if  agent.block == False and agent.locations[location_name] == -1:
                             dist = get_distance(location_point,neighbor_positions[i])
 
-                            agent.locations[location_name] = m_range + 0.5 * dist
+                            agent.locations[location_name] = m_range + 0.1 * dist
 
 
     while(True):
@@ -69,11 +75,11 @@ def A_star(self, location_point,location_name,blocks):
                         if agent.block == False and agent.locations[location_name] == -1:
 
                             dist = get_distance(location_point,neighbor_positions[i])
-                            agent.locations[location_name] = m_range + 0.5 * dist
+                            agent.locations[location_name] = m_range + 0.1 * dist
             
         if len(node_list) == 0:
             return
-def create_block(self,location_list,):
+def create_block(self,location_list,POI_locations):
 
     for i in range(len(location_list)):
             this_cell = self.grid.get_cell_list_contents(location_list[i])
@@ -81,7 +87,7 @@ def create_block(self,location_list,):
 
                 if type(agent) is nodeAgent:
                         agent.block = True
-                        for i in ['POI2']:
+                        for i in POI_locations:
                             agent.locations[i] = 100000
                             
 
@@ -89,14 +95,17 @@ def create_block(self,location_list,):
 class Model(Model):
     """A model with some number of agents."""
     def __init__(self, N, width, height):
+
+
+
         super().__init__()
         self.num_agents = N
         self.grid = MultiGrid(width, height, False)
         self.schedule = RandomActivation(self)
         
 
-        #location_list = {'POI1','POI2','POI3'}
-        location_list ={'POI2'}
+        location_list = ['POI1','POI2','POI3']
+        #location_list ={'POI2'}
         for i in range(height):
             for j in range(width):
 
@@ -104,8 +113,29 @@ class Model(Model):
                self.grid.place_agent(nd,(i,j))
 
 
-        locations = [(40,10)]
-        location_names =['POI2']
+        block1 =[(20+i,10) for i in range(10)]
+        block2= [(20,11),(20,12),(20,13),(20,14)]
+        block3 =[(20+i,20) for i in range(10)]
+        block4= [(20,41),(20,42),(20,43),(20,44)]
+        block5 =[(25,20+i) for i in range(10)]
+        block6 =[(25,10+i) for i in range(10)]
+        block7 =[(10,0+i) for i in range(10)]
+        block8 =[(0+i,30) for i in range(10)]
+        block9 =[(35+i,30) for i in range(10)]
+        block10 =[(15+i,25) for i in range(10)]
+
+        self.blocks =[]
+        for b in [block1,block2,block3,block4,block5,block6,block7,block8,block9,block10]:
+            for e in b:
+                self.blocks.append(e)
+
+        locations = [(40,10),(40,45),(10,40)]
+        location_names =['POI1','POI2','POI3']
+
+        create_block(self,self.blocks,location_names)
+
+        locations = [(40,10),(40,45),(10,40)]
+        location_names =['POI1','POI2','POI3']
         for r in range(len(locations)):
         #for r in range(3):    
             
@@ -113,7 +143,7 @@ class Model(Model):
             y= locations[r][1]
             
 
-            moore_range = 5
+            moore_range = 2
             for i in range(1,moore_range):
                 for j in range(2*i+1):
 
@@ -127,24 +157,7 @@ class Model(Model):
                                 self.grid.place_agent(poi, coords) 
 
         
-        block1 =[(20+i,10) for i in range(10)]
-        block2= [(20,11),(20,12),(20,13),(20,14)]
-        block3 =[(20+i,20) for i in range(10)]
-        block4= [(20,41),(20,42),(20,43),(20,44)]
-        block5 =[(25,20+i) for i in range(10)]
-        block6 =[(25,10+i) for i in range(10)]
-        block7 =[(10,0+i) for i in range(10)]
-        block8 =[(0+i,30) for i in range(10)]
-        block9 =[(35+i,30) for i in range(10)]
-
-        blocks =[]
-        for b in [block1,block2,block3,block4,block5,block6,block7,block8,block9]:
-            for e in b:
-                blocks.append(e)
-
-        create_block(self,blocks)
-
-        A_star(self, (x,y), location_names[r],blocks)                     
+            A_star(self, (x,y), location_names[r],self.blocks)                     
  
 
         for i in range(self.num_agents):
@@ -152,10 +165,21 @@ class Model(Model):
             self.schedule.add(a)
 
             # Add the agent to a random grid cell
-          
-            x = random.randrange(self.grid.width)
-            y = random.randrange(self.grid.height)
-            #print(self.grid.get_cell_list_contents((x,y)))
+            notblock = False
+            while( notblock == False):
+                
+                x = random.randrange(self.grid.width)
+                y = random.randrange(self.grid.height)
+                this_cell = self.grid.get_cell_list_contents((x,y)) 
+                for agent in this_cell:
+
+                    if type(agent) is nodeAgent:
+                        if (agent.block == False): 
+                            notblock =True
+                            break
+
+
+
 
             self.grid.place_agent(a, (x, y))
 
