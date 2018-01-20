@@ -1,10 +1,10 @@
 from mesa.visualization.modules import CanvasGrid
 from mesa.visualization.ModularVisualization import ModularServer
-
 from mesa.visualization.UserParam import UserSettableParameter
 from model import Model
 import model
 import agents
+import randomcolor
 
 def agent_portrayal(agent):
 
@@ -26,13 +26,13 @@ def agent_portrayal(agent):
 
     if type(agent) is agents.commuterAgent:
 
-        portrayal["Color"] = "red" 
+        portrayal["Color"] = randomcolor.RandomColor(agent.unique_id + 1).generate()
         portrayal["Layer"] = 2
-    
+
     if type(agent) is agents.POIAgent:
         portrayal["Color"] = "green"
         portrayal["Layer"] = 1
-    
+
 
 
 
@@ -42,7 +42,7 @@ def agent_portrayal(agent):
     # if agent.wealth > 0:
     #     portrayal["Color"] = "red"
     #     portrayal["Layer"] = 0
-   
+
     return portrayal
 
 n_slider = UserSettableParameter("slider", "Numer of agents", 100, 2, 200, 1)
