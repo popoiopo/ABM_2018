@@ -51,17 +51,14 @@ class commuterAgent(Agent):
             if cost_pos_list[k][0] == best_cost:
                 candidate_list.append(cost_pos_list[k])
         neighbor_list = self.model.grid.get_neighbors(self.pos, True, False, 1)
-        # print("Candidate list")
-        # print(candidate_list)
+
         for neighbor in neighbor_list:
             if type(neighbor) == commuterAgent:
                 for candidate in candidate_list:
                     if neighbor.pos in candidate:
                         candidate_list = list(filter(lambda a: a != candidate, candidate_list))
-        # print(self.pos)
-        # print(candidate_list)
+
         random.shuffle(candidate_list)
-        print(candidate_list)
         if candidate_list == []:
             return
         new_position = candidate_list[0][1]
