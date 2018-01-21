@@ -66,7 +66,7 @@ def A_star(self, location_point,location_name,blocks):
             this_cell = self.grid.get_cell_list_contents(neighbor_positions[i])
 
             if not (neighbor_positions[i] in check_list) and neighbor_positions[i] not in blocks:
-
+               # if neighbor_positions[i]- location_point [0 =1[1] =1] # digonal , add 1.4 else add 1
                 node_list.append((neighbor_positions[i],m_range+1))
                 check_list.append(neighbor_positions[i])
                 # get the node agent, assign to its location value of i, which refers to the range of moor neighbourhood

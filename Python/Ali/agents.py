@@ -22,10 +22,9 @@ def get_commuters_density(self,moore_range,position):
 
     x= position[0]
     y= position[1]
-    print(x,y)
 
-    number_of_agents = 0
-
+    agent_lst =[]
+    #repeated population 
     for i in range(1,moore_range):
         for j in range(2*i+1):
 
@@ -39,8 +38,9 @@ def get_commuters_density(self,moore_range,position):
                         for k in cell_content:
                            
                             if type(k) == commuterAgent:
-                                number_of_agents += 1                          
-    return number_of_agents                        
+                                agent_lst.append(k.unique_id)
+
+    return len(list(set(agent_lst)))                       
 
 
 
@@ -57,34 +57,38 @@ class commuterAgent(Agent):
 
         possible_steps = self.model.grid.get_neighborhood(
             self.pos,
-            moore=True,
-            include_center=False)
+            True,
+            False,1)
        
         for i in range(len(possible_steps)):
             
             this_cell = self.model.grid.get_cell_list_contents(possible_steps[i])
 
-
-            this_cell_neighbour = self.model.grid.get_cell_list_contents(possible_steps[i])
-
             for agent in this_cell:
 
-                    if type(agent) is type(self):
-                      break
+                    #if type(agent) is type(self):
+                    #    break
                         
                     if type(agent) is nodeAgent:
                     
                         if agent.locations[destination]:
                             cost_pos_list.append( (agent.locations[destination], possible_steps[i]) )
-                                     
 
+                                     
             for k in range(len(cost_pos_list)):
                 position = cost_pos_list[k][1]
                 #print(position)
-                density = get_commuters_density(self,3,position)
+                density = get_commuters_density(self,2,position)
                 print(density)
-                cost_pos_list[k] = (cost_pos_list[k][0] + (0.01 * density) , cost_pos_list[k][1])
+                cost_pos_list[k] = (cost_pos_list[k][0] + ( 2 * density / 10) , cost_pos_list[k][1])
 
+        neighbor_list = self.model.grid.get_neighbors(self.pos, True, False, 1)
+
+        for neighbor in neighbor_list:
+            if type(neighbor) == commuterAgent:
+                for cost_pos_tuple in cost_pos_list:
+                    if neighbor.pos == cost_pos_tuple[1]:
+                        cost_pos_list = list(filter(lambda a: a != cost_pos_tuple, cost_pos_list))
 
 
 
@@ -96,10 +100,11 @@ class commuterAgent(Agent):
 
         for k in range(len(cost_pos_list)):
             if cost_pos_list[k][0] == best_cost:
-                candidate_list.append(cost_pos_list[k]) 
-                
+                candidate_list.append(cost_pos_list[k][1]) 
+
+       
         random.shuffle(candidate_list)
-        new_position = candidate_list[0][1]
+        new_position = candidate_list[0]
         self.model.grid.move_agent(self, new_position)
 
 
@@ -110,7 +115,7 @@ class commuterAgent(Agent):
 
 
     def step(self):
-        self.move('POI1')
+        self.move('POI3')
   
 
 
