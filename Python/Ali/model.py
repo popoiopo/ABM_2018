@@ -18,7 +18,7 @@ sys.setrecursionlimit(20000)
 # (x-i+j,y+i,moore_range-i)
 # (x-i+j,y-i,moore_range-i)
 
-def A_star(self, location_point,location_name,blocks):
+def A_star(self, location_point,location_name,blocks, distance_coefficent, m_range_coefficent):
 
     pos = location_point
     node_list =[]
@@ -46,7 +46,7 @@ def A_star(self, location_point,location_name,blocks):
                         if  agent.block == False and agent.locations[location_name] == -1:
                             dist = get_distance(location_point,neighbor_positions[i])
 
-                            agent.locations[location_name] = m_range + 0.1 * dist
+                            agent.locations[location_name] = (m_range_coefficent * m_range) + (distance_coefficent * dist)
 
 
     while(True):
@@ -66,19 +66,28 @@ def A_star(self, location_point,location_name,blocks):
             this_cell = self.grid.get_cell_list_contents(neighbor_positions[i])
 
             if not (neighbor_positions[i] in check_list) and neighbor_positions[i] not in blocks:
-               # if neighbor_positions[i]- location_point [0 =1[1] =1] # digonal , add 1.4 else add 1
-                node_list.append((neighbor_positions[i],m_range+1))
+
+
+                dx = neighbor_positions[i][0] - pos[0]
+                dy =  neighbor_positions[i][1] - pos[1]
+                if math.fabs(dx) ==1 and math.fabs(dy) ==1:  # if  digonal move , add cost of 1.4 else add cost of 1
+
+                    node_list.append((neighbor_positions[i],m_range+1.4))
+                else:
+                    node_list.append((neighbor_positions[i],m_range+1))
+
                 check_list.append(neighbor_positions[i])
-                # get the node agent, assign to its location value of i, which refers to the range of moor neighbourhood
+                # get the node agent, assign to its location value of i, which refers to the range of moore neighbourhood
                 for agent in this_cell:
                     if   type(agent) is nodeAgent:
                         if agent.block == False and agent.locations[location_name] == -1:
 
                             dist = get_distance(location_point,neighbor_positions[i])
-                            agent.locations[location_name] = m_range + 0.1 * dist
+                            agent.locations[location_name] =    (m_range_coefficent * m_range) + (distance_coefficent * dist)
             
         if len(node_list) == 0:
             return
+
 def create_block(self,location_list,POI_locations):
 
     for i in range(len(location_list)):
@@ -88,7 +97,7 @@ def create_block(self,location_list,POI_locations):
                 if type(agent) is nodeAgent:
                         agent.block = True
                         for i in POI_locations:
-                            agent.locations[i] = 100000
+                            agent.locations[i] = 10000000000
                             
 
 
@@ -134,7 +143,7 @@ class Model(Model):
 
         create_block(self,self.blocks,location_names)
 
-        locations = [(40,10),(40,45),(10,40)]
+        locations = [(32,10),(40,45),(10,40)]
         location_names =['POI1','POI2','POI3']
         for r in range(len(locations)):
         #for r in range(3):    
@@ -157,7 +166,7 @@ class Model(Model):
                                 self.grid.place_agent(poi, coords) 
 
         
-            A_star(self, (x,y), location_names[r],self.blocks)                     
+            A_star(self, (x,y), location_names[r],self.blocks,0.5,1)                     
  
 
         for i in range(self.num_agents):

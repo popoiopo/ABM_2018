@@ -51,6 +51,8 @@ class commuterAgent(Agent):
     def __init__(self, unique_id, model):
         super().__init__(unique_id, model)
 
+        self.density_coefficent = 5
+
     def move(self,destination):
 
         cost_pos_list = []
@@ -80,7 +82,8 @@ class commuterAgent(Agent):
                 #print(position)
                 density = get_commuters_density(self,2,position)
                 print(density)
-                cost_pos_list[k] = (cost_pos_list[k][0] + ( 2 * density / 10) , cost_pos_list[k][1])
+                cost_pos_list[k] = (cost_pos_list[k][0] + ( self.density_coefficent * density / self.model.num_agents )\
+                                     , cost_pos_list[k][1])
 
         neighbor_list = self.model.grid.get_neighbors(self.pos, True, False, 1)
 
@@ -115,7 +118,7 @@ class commuterAgent(Agent):
 
 
     def step(self):
-        self.move('POI3')
+        self.move('POI1')
   
 
 
