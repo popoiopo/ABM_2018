@@ -1,6 +1,6 @@
 import random
 import math
-from mesa import Agent
+from mesa_own import Agent
 
 
 def get_distance(pos_1, pos_2):
@@ -50,7 +50,7 @@ class commuterAgent(Agent):
         for k in range(len(cost_pos_list)):
             if cost_pos_list[k][0] == best_cost:
                 candidate_list.append(cost_pos_list[k])
-        neighbor_list = self.model.grid.get_neighbors(self.pos, True, False, 1)
+        neighbor_list = self.model.grid.get_neighbors(self.pos, True, False, 2)
 
         for neighbor in neighbor_list:
             if type(neighbor) == commuterAgent:

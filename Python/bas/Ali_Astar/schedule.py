@@ -1,7 +1,7 @@
 import random
 from collections import defaultdict
 
-from mesa.time import RandomActivation
+from mesa_own.time import RandomActivation
 
 
 class RandomActivationByBreed(RandomActivation):
