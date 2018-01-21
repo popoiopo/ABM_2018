@@ -37,7 +37,7 @@ def agent_portrayal(agent):
     return portrayal
 
 
-n_slider = UserSettableParameter("slider", "Numer of agents", 100, 2, 200, 1)
+n_slider = UserSettableParameter("slider", "Number of agents", 100, 2, 200, 1)
 domain_size = UserSettableParameter("slider", "GridSize", 50, 50, 50, 1)
 grid = CanvasGrid(agent_portrayal, 50, 50, 600, 600)
 
