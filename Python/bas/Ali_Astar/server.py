@@ -17,17 +17,16 @@ def agent_portrayal(agent):
         portrayal["Color"] = "white"
         portrayal["Layer"] = 0
 
-    if type(agent) is agents.nodeAgent and agent.block ==True:
+    if type(agent) is agents.nodeAgent and agent.block is True:
         portrayal["Color"] = "black"
         portrayal["Layer"] = 0
 
     if type(agent) is agents.commuterAgent:
-
         portrayal["Color"] = randomcolor.RandomColor(agent.unique_id + 1).generate()
         portrayal["Layer"] = 2
 
     if type(agent) is agents.POIAgent:
-        portrayal["Color"] = "green"
+        portrayal["Color"] = "red"
         portrayal["Layer"] = 1
 
     # if agent.wealth > 0:
