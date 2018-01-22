@@ -143,8 +143,8 @@ class Model(Model):
 
         create_block(self,self.blocks,location_names)
 
-        locations = [(32,10),(40,45),(10,40)]
-        location_names =['POI1','POI2','POI3']
+        #locations = [(32,10),(40,45),(10,40)]
+        #location_names =['POI1','POI2','POI3']
         for r in range(len(locations)):
         #for r in range(3):    
             
@@ -166,12 +166,34 @@ class Model(Model):
                                 self.grid.place_agent(poi, coords) 
 
         
-            A_star(self, (x,y), location_names[r],self.blocks,0.5,1)                     
+            A_star(self, (x,y), location_names[r],self.blocks,0.5,2)                     
  
 
-        for i in range(self.num_agents):
-            a = commuterAgent(i, self)
-            self.schedule.add(a)
+        # for i in range(self.num_agents):
+        #     a = commuterAgent(id, self,location_names[0])
+        #     self.schedule.add(a)
+        #     id = id +1
+
+        # for j in range(self.num_agents):
+        #     a = commuterAgent(id, self,location_names[1])
+        #     self.schedule.add(a)
+        #     id = id +1 
+
+        commuters_list = []
+        for k in range(self.num_agents):
+            a = commuterAgent("{0}{1}".format(k,location_list[0]), self,location_list[0])
+            b = commuterAgent("{0}{1}".format(k,location_list[1]), self,location_list[1])
+            c = commuterAgent("{0}{1}".format(k,location_list[2]), self,location_list[2])
+            commuters_list.append(a)
+            commuters_list.append(b)
+            commuters_list.append(c)
+        
+
+
+        for commuter in commuters_list:
+
+            self.schedule.add(commuter)
+            
 
             # Add the agent to a random grid cell
             notblock = False
@@ -188,9 +210,7 @@ class Model(Model):
                             break
 
 
-
-
-            self.grid.place_agent(a, (x, y))
+            self.grid.place_agent(commuter, (x, y))
 
         # self.datacollector = DataCollector(
         #     model_reporters={"Gini": compute_gini},

@@ -46,12 +46,15 @@ def get_commuters_density(self,moore_range,position):
 
 
 
+
+
 class commuterAgent(Agent):
     """ An agent with fixed initial wealth."""
-    def __init__(self, unique_id, model):
+    def __init__(self, unique_id, model,destination):
         super().__init__(unique_id, model)
 
-        self.density_coefficent = 5
+        self.density_coefficent = 3
+        self.destination =  destination
 
     def move(self,destination):
 
@@ -79,9 +82,9 @@ class commuterAgent(Agent):
                                      
             for k in range(len(cost_pos_list)):
                 position = cost_pos_list[k][1]
-                #print(position)
+        
                 density = get_commuters_density(self,2,position)
-                print(density)
+
                 cost_pos_list[k] = (cost_pos_list[k][0] + ( self.density_coefficent * density / self.model.num_agents )\
                                      , cost_pos_list[k][1])
 
@@ -118,7 +121,7 @@ class commuterAgent(Agent):
 
 
     def step(self):
-        self.move('POI1')
+        self.move(self.destination)
   
 
 
