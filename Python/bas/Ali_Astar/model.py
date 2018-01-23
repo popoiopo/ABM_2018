@@ -109,7 +109,7 @@ class Model(Model):
         self.grid = MultiGrid(domain_size, domain_size, False)
         self.schedule = BaseScheduler(self)
 
-        locations = [ (26, 49),(40, 10), (10, 5)]
+        locations = [ (26, 49),(40, 10), (5, 7)]
         #location_names = ['POI1', 'POI2', 'POI3']
         location_names = ['STAGE', 'BAR', 'WC']
 
