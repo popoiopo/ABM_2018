@@ -109,7 +109,7 @@ class Model(Model):
         self.grid = MultiGrid(domain_size, domain_size, False)
         self.schedule = BaseScheduler(self)
 
-        locations = [ (40, 45),(40, 10), (10, 40)]
+        locations = [ (26, 49),(40, 10), (10, 5)]
         #location_names = ['POI1', 'POI2', 'POI3']
         location_names = ['STAGE', 'BAR', 'WC']
 
@@ -131,7 +131,7 @@ class Model(Model):
         block10 = [(15+i, 25) for i in range(10)]
 
         self.blocks = []
-        for b in [block1, block2, block3, block4, block5, block6, block7, block8, block9, block10]:
+        for b in [block1, block2, block3, block5, block6, block7, block8, block9, block10]:
             for e in b:
                 self.blocks.append(e)
 
