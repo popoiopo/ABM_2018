@@ -21,6 +21,7 @@ def A_star(self, location_point, location_name, blocks, distance_coefficent, m_r
     pos = location_point
     node_list = []
     check_list = []
+
     distance_coefficent = 0
     m_range_coefficent = 1
 
@@ -108,12 +109,14 @@ class Model(Model):
         self.grid = MultiGrid(domain_size, domain_size, False)
         self.schedule = BaseScheduler(self)
 
-        location_list = ['POI1', 'POI2', 'POI3']
-        # location_list ={'POI2'}
+        locations = [ (40, 45),(40, 10), (10, 40)]
+        #location_names = ['POI1', 'POI2', 'POI3']
+        location_names = ['STAGE', 'BAR', 'WC']
+
         for i in range(domain_size):
             for j in range(domain_size):
 
-                nd = nodeAgent((i, j), self, location_list)
+                nd = nodeAgent((i, j), self, location_names)
                 self.grid.place_agent(nd, (i, j))
 
         block1 = [(20 + i, 10) for i in range(10)]
@@ -132,8 +135,7 @@ class Model(Model):
             for e in b:
                 self.blocks.append(e)
 
-        locations = [(40, 10), (40, 45), (10, 40)]
-        location_names = ['POI1', 'POI2', 'POI3']
+  
         create_block(self, self.blocks, location_names)
 
         for r in range(len(locations)):
@@ -155,17 +157,17 @@ class Model(Model):
                                 self.grid.place_agent(poi, coords)
 
             A_star(self, (x, y), location_names[r], self.blocks, 0.5, 2)
-        array_plop = np.zeros((50, 50))
-        for i in range(50):
-            for j in range(50):
-                this_cell = self.grid.get_cell_list_contents((i, j))
-                for agent in this_cell:
-                    if type(agent) is nodeAgent:
-                         array_plop[49 - i][j] = agent.locations['POI1']
+        # array_plop = np.zeros((50, 50))
+        # for i in range(50):
+        #     for j in range(50):
+        #         this_cell = self.grid.get_cell_list_contents((i, j))
+        #         for agent in this_cell:
+        #             if type(agent) is nodeAgent:
+        #                  array_plop[49 - i][j] = agent.locations['POI1']
 
-        np.set_printoptions(precision=1)
-        for i in array_plop:
-            print(i)
+        # np.set_printoptions(precision=1)
+        # for i in array_plop:
+        #     print(i)
         # print(array_plop)
         # with open("Output.txt", "w") as text_file:
         #     for i in array_plop:
@@ -174,11 +176,11 @@ class Model(Model):
         commuters_list = []
         agentId = 0
         for k in range(self.num_agents):
-            a = commuterAgent(agentId, self, location_list[0])
+            a = commuterAgent(agentId, self, location_names[0])
             agentId += 1
-            b = commuterAgent(agentId, self, location_list[1])
+            b = commuterAgent(agentId, self, location_names[0])
             agentId += 1
-            c = commuterAgent(agentId, self, location_list[2])
+            c = commuterAgent(agentId, self, location_names[0])
             agentId += 1
             commuters_list.append(a)
             commuters_list.append(b)

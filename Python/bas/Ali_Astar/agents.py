@@ -2,7 +2,6 @@ import random
 import math
 from mesa_own import Agent
 
-
 def get_distance(pos_1, pos_2):
     """ Get the distance between two point
 
@@ -46,8 +45,11 @@ class commuterAgent(Agent):
     """ An agent with fixed initial wealth."""
     def __init__(self, unique_id, model, destination):
         super().__init__(unique_id, model)
-
-        self.density_coefficent = 3
+        self.state = 'JUST_ARRIVED'
+        self.action = 'DO_NOTHING'
+        self.WAITING_TIME_AT_BAR =0
+        self.WAITING_TIME_AT_WC = 0
+        self.density_coefficent = 0
         self.destination = destination
 
     def move(self, destination):
@@ -56,6 +58,7 @@ class commuterAgent(Agent):
             self.pos,
             moore=True,
             include_center=False)
+
 
         cost_pos_list = []
 
@@ -79,10 +82,10 @@ class commuterAgent(Agent):
 
         neighbor_list = self.model.grid.get_neighbors(self.pos, True, False, 1)
 
-        if self.unique_id == 1:
-            print("########################################")
-            print(self.unique_id)
-            print(self.pos)
+        # if self.unique_id == 1:
+        #     print("########################################")
+        #     print(self.unique_id)
+        #     print(self.pos)
 
         for neighbor in neighbor_list:
             if type(neighbor) == commuterAgent:
@@ -91,8 +94,8 @@ class commuterAgent(Agent):
                         cost_pos_list = list(filter(lambda a: a != cost_pos_tuple, cost_pos_list))
 
         cost_pos_list.append((200, self.pos))
-        if self.unique_id == 1:
-            print(cost_pos_list)
+        # if self.unique_id == 1:
+        #     print(cost_pos_list)
         best_cost = min(cost_pos_list, key=lambda x: x[0])[0]
         candidate_list = []
 
@@ -105,15 +108,128 @@ class commuterAgent(Agent):
         random.seed(5)
         random.shuffle(candidate_list)
         new_position = candidate_list[0]
-        if self.unique_id == 1:
-            print(candidate_list)
-            for i in cost_pos_list:
-                if new_position in i:
-                    print(i)
+        # if self.unique_id == 1:
+        #     print(candidate_list)
+        #     for i in cost_pos_list:
+        #         if new_position in i:
+        #             print(i)
         self.model.grid.move_agent(self, new_position)
 
+
+    def getNextAction(self, state):
+
+        state = self.state
+        action = self.action
+
+        if state == 'JUST_ARRIVED':
+
+            possible_actions = ['GO_TO_STAGE','GO_TO_WC','GO_TO_BAR']
+            possible_actions_probablities = [0.9,0.05, 0.05]
+
+            rand =random.random()
+            if rand <= 0.9 :
+
+                state = 'MOVING_TO_STAGE'
+                action = 'GO_TO_STAGE'
+                self.move('STAGE')
+
+            elif  (rand > 0.9 and rand <= (0.9 + 0.05)  ):
+                    
+                state = 'MOVING_TO_WC'
+                action = 'GO_TO_WC'
+                self.move('WC')
+
+            else:
+
+                state ='MOVING_TO_BAR'
+                action = 'GO_TO_BAR'
+                self.move('BAR')
+
+
+        if state == 'BEING_AT_BAR':
+
+            if self.WAITING_TIME_AT_BAR <= 5:
+
+                self.WAITING_TIME_AT_BAR += 1
+                action = 'DO_NOTHING'
+
+            else:
+
+                self.WAITING_TIME_AT_BAR  = 0
+                state = 'MOVING_TO_STAGE'
+                self.move('STAGE')
+
+            
+        if state == 'BEING_AT_WC':
+
+            if self.WAITING_TIME_AT_WC <= 5:
+
+                self.WAITING_TIME_AT_WC += 1
+                action = 'DO_NOTHING'
+
+            else:
+
+                self.WAITING_TIME_AT_WC = 0
+                state = 'MOVING_TO_STAGE'
+                self.move('STAGE')
+
+
+        if state == "MOVING_TO_STAGE":
+
+            action = 'GO_TO_STAGE'
+            self.move('STAGE')
+
+
+        if state== 'MOVING_TO_BAR':
+
+            action = 'GO_TO_BAR'
+            self.move('BAR')
+
+
+        if state== 'MOVING_TO_WC':
+
+            action = 'GO_TO_WC'
+            self.move('WC')
+
+
+        if state == 'BEING_AT_STAGE':
+
+            possible_actions = ['DO_NOTHING','GO_TO_BAR','GO_TO_WC']
+            possible_actions_probablities = [0.8, 0.15, 0.05]
+
+            rand =random.random()
+            if rand <= 0.8:
+
+                action = 'DO_NOTHING'
+
+            elif  (rand > 0.8 and  rand <= (0.8 + 0.15) ):
+
+                action = 'GO_TO_BAR'
+                state = 'moveing_toward_Bar'
+                self.move('BAR')
+
+            else: 
+
+                action ='GO_TO_WC'
+                state = 'MOVING_TO_WC'
+                self.move('WC')
+
+        self. state = state
+        self. action = action
+
+        return (state, action) 
+
+
     def step(self):
-        self.move(self.destination)
+
+        if self.unique_id == 1:
+             print("########################################")
+             print(self.unique_id)
+             print(self.pos)
+             print(self.getNextAction(self.state))
+       
+        self.getNextAction(self.state)
+        #self.move(self.destination)
 
 
 class nodeAgent(Agent):
