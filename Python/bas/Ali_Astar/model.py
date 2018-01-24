@@ -27,7 +27,7 @@ def A_star(self, location_point, location_name, blocks, distance_coefficent, m_r
 
     this_cell = self.grid.get_cell_list_contents(pos)
     for agent in this_cell:
-        if agent.block is False and agent.locations[location_name] == -1:
+        if type(agent) is nodeAgent and agent.block is False and agent.locations[location_name] == -1:
             agent.locations[location_name] = 0
 
     neighbor_positions = self.grid.get_neighborhood(
@@ -178,13 +178,13 @@ class Model(Model):
         for k in range(self.num_agents):
             a = commuterAgent(agentId, self, location_names[0])
             agentId += 1
-            b = commuterAgent(agentId, self, location_names[0])
-            agentId += 1
-            c = commuterAgent(agentId, self, location_names[0])
-            agentId += 1
+            # b = commuterAgent(agentId, self, location_names[0])
+            # agentId += 1
+            # c = commuterAgent(agentId, self, location_names[0])
+            # agentId += 1
             commuters_list.append(a)
-            commuters_list.append(b)
-            commuters_list.append(c)
+            # commuters_list.append(b)
+            # commuters_list.append(c)
 
         for commuter in commuters_list:
 
@@ -193,7 +193,7 @@ class Model(Model):
             # Add the agent to a random grid cell
             notblock = False
             while(notblock is False):
-                random.seed(5)
+                # random.seed(5)
                 x = random.randrange(self.grid.width)
                 y = random.randrange(self.grid.height)
                 this_cell = self.grid.get_cell_list_contents((x, y))
