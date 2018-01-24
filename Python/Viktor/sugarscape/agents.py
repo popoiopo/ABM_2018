@@ -19,7 +19,7 @@ def get_distance(pos_1, pos_2):
 
 
 class SsAgent(Agent):
-    def __init__(self, pos, model, moore=True, sugar=0, metabolism=0, vision=0):
+    def __init__(self, pos, model, moore=True, sugar=0, metabolism=0, vision=0, count=0, thirst=False):
         super().__init__(pos, model)
         self.pos = pos
         self.model = model
@@ -27,6 +27,8 @@ class SsAgent(Agent):
         self.sugar = sugar
         self.metabolism = metabolism
         self.vision = vision
+        self.count = count
+        self.thirst = thirst
 
     def get_sugar(self, pos):
         this_cell = self.model.grid.get_cell_list_contents([pos])
@@ -123,6 +125,12 @@ class SsAgent(Agent):
 
     def step(self):
         self.move()
+        rand = random.randint(0,10)
+        if rand >= 2:
+            self.count += 1
+        if self.count == 30:
+            print('bar')
+            self.thirst = True
 
 
 
