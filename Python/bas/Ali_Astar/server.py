@@ -21,13 +21,24 @@ def agent_portrayal(agent):
         portrayal["Color"] = "black"
         portrayal["Layer"] = 0
 
-    if type(agent) is agents.commuterAgent:
-        portrayal["Color"] = randomcolor.RandomColor(agent.unique_id + 1).generate()
-        portrayal["Layer"] = 2
-
     if type(agent) is agents.POIAgent:
         portrayal["Color"] = "red"
         portrayal["Layer"] = 1
+
+    if type(agent) is agents.commuterAgent and agent.layer is "Bar":
+        # portrayal["Color"] = randomcolor.RandomColor(agent.unique_id + 1).generate()
+        portrayal["Color"] = "green"
+        portrayal["Layer"] = 2
+
+    if type(agent) is agents.commuterAgent and agent.layer is "Stage":
+        # portrayal["Color"] = randomcolor.RandomColor(agent.unique_id + 1).generate()
+        portrayal["Color"] = "blue"
+        portrayal["Layer"] = 3
+
+    if type(agent) is agents.commuterAgent and agent.layer is "WC":
+        # portrayal["Color"] = randomcolor.RandomColor(agent.unique_id + 1).generate()
+        portrayal["Color"] = "yellow"
+        portrayal["Layer"] = 4
 
     # if agent.wealth > 0:
     #     portrayal["Color"] = "red"
