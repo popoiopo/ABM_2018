@@ -50,6 +50,8 @@ class commuterAgent(Agent):
         self.WAITING_TIME_AT_BAR =0
         self.WAITING_TIME_AT_WC = 0
         self.density_coefficent = 0
+        self.POI_dict = {'STAGE': (26, 49),'BAR': (40, 10), 'WC': (5, 7)}
+
         self.destination = destination
 
     def move(self, destination):
@@ -116,7 +118,7 @@ class commuterAgent(Agent):
         self.model.grid.move_agent(self, new_position)
 
 
-    def getNextAction(self, state):
+    def getNextAction(self, state,POI_dict):
 
         state = self.state
         action = self.action
@@ -179,8 +181,18 @@ class commuterAgent(Agent):
             action = 'GO_TO_STAGE'
             self.move('STAGE')
 
+            effort_distance =(10,1000)
+        # here we will have inner states at stage, for example try to get closer, if they see empty spaces   
 
-        if state== 'MOVING_TO_BAR':
+            # TO DO HOW to place the agents when they arrive
+            if get_distance(self.pos,POI_dict['STAGE']) <= 7:
+                state = "BEING_AT_STAGE"
+            #else:
+            # try to get closer to location, in 5 attempts, otherwise, 
+            # change state to AT stage, and record your happiness, by your distance from stage.     
+
+
+        if state == 'MOVING_TO_BAR':
 
             action = 'GO_TO_BAR'
             self.move('BAR')
@@ -197,7 +209,7 @@ class commuterAgent(Agent):
             possible_actions = ['DO_NOTHING','GO_TO_BAR','GO_TO_WC']
             possible_actions_probablities = [0.8, 0.15, 0.05]
 
-            rand =random.random()
+            rand = random.random()
             if rand <= 0.8:
 
                 action = 'DO_NOTHING'
@@ -210,7 +222,7 @@ class commuterAgent(Agent):
 
             else: 
 
-                action ='GO_TO_WC'
+                action = 'GO_TO_WC'
                 state = 'MOVING_TO_WC'
                 self.move('WC')
 
@@ -226,9 +238,9 @@ class commuterAgent(Agent):
              print("########################################")
              print(self.unique_id)
              print(self.pos)
-             print(self.getNextAction(self.state))
+             #print(self.getNextAction(self.state,self.POI_dict))
        
-        self.getNextAction(self.state)
+        self.getNextAction(self.state,self.POI_dict)
         #self.move(self.destination)
 
 
