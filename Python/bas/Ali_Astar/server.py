@@ -25,20 +25,20 @@ def agent_portrayal(agent):
         portrayal["Color"] = "red"
         portrayal["Layer"] = 1
 
-    if type(agent) is agents.commuterAgent and agent.layer is "Bar":
+    if type(agent) is agents.commuterAgent and agent.layer is "BAR":
         # portrayal["Color"] = randomcolor.RandomColor(agent.unique_id + 1).generate()
         portrayal["Color"] = "green"
         portrayal["Layer"] = 2
 
-    if type(agent) is agents.commuterAgent and agent.layer is "Stage":
+    if type(agent) is agents.commuterAgent and agent.layer is "STAGE":
         # portrayal["Color"] = randomcolor.RandomColor(agent.unique_id + 1).generate()
         portrayal["Color"] = "blue"
         portrayal["Layer"] = 3
 
     if type(agent) is agents.commuterAgent and agent.layer is "WC":
         # portrayal["Color"] = randomcolor.RandomColor(agent.unique_id + 1).generate()
-        portrayal["Color"] = "yellow"
-        portrayal["Layer"] = 4
+        portrayal["Color"] = "brown"
+        portrayal["Layer"] = 4 
 
     # if agent.wealth > 0:
     #     portrayal["Color"] = "red"
@@ -47,7 +47,7 @@ def agent_portrayal(agent):
     return portrayal
 
 
-n_slider = UserSettableParameter("slider", "Number of agents", 100, 2, 200, 1)
+n_slider = UserSettableParameter("slider", "Number of agents", 5, 2, 200, 1)
 domain_size = UserSettableParameter("slider", "GridSize", 50, 50, 50, 1)
 grid = CanvasGrid(agent_portrayal, 50, 50, 600, 600)
 
