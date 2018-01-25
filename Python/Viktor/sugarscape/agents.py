@@ -21,7 +21,11 @@ def get_distance(pos_1, pos_2):
 
 
 class SsAgent(Agent):
+<<<<<<< HEAD
     def __init__(self, pos, model, moore=True, sugar=0, metabolism=0, vision=0, closeness = 1, toilet = False, toilet_need=0.0, stepsize = 1, beer = False, beer_need = 0.0, push = 1.412):
+=======
+    def __init__(self, pos, model, moore=True, sugar=0, metabolism=0, vision=0, count=0, thirst=False):
+>>>>>>> aec55e6856c3ce73e2a70580cade45501422acfe
         super().__init__(pos, model)
         self.pos = pos
         self.model = model
@@ -33,11 +37,16 @@ class SsAgent(Agent):
         self.beer_need = beer_need
         self.metabolism = metabolism
         self.vision = vision
+<<<<<<< HEAD
         self.stepsize = stepsize
         self.push = push
         
         # How close can agents stand next to eachother?
         self.closeness = closeness
+=======
+        self.count = count
+        self.thirst = thirst
+>>>>>>> aec55e6856c3ce73e2a70580cade45501422acfe
 
     def get_sugar(self, pos):
         this_cell = self.model.grid.get_cell_list_contents([pos])
@@ -384,7 +393,20 @@ class SsAgent(Agent):
         self.model.grid.move_agent(self, final_candidates[0])
  
     def step(self):
+<<<<<<< HEAD
         self.move2()
+=======
+        self.move()
+        rand = random.randint(0,10)
+        if rand >= 2:
+            self.count += 1
+        if self.count == 30:
+            print('bar')
+            self.thirst = True
+
+
+
+>>>>>>> aec55e6856c3ce73e2a70580cade45501422acfe
 
 class Sugar(Agent):
     def __init__(self, pos, model):

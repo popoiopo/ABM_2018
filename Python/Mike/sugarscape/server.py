@@ -23,7 +23,7 @@ def SsAgent_portrayal(agent):
     portrayal = {}
 
     if type(agent) is SsAgent:
-        portrayal["Shape"] = "sugarscape/resources/ant.png"
+        portrayal["Shape"] = "sugarscape/resources/fem.jpg"
         portrayal["scale"] = 0.9
         portrayal["Layer"] = 1
 
@@ -41,7 +41,7 @@ def SsAgent_portrayal(agent):
     return portrayal
 
 
-canvas_element = CanvasGrid(SsAgent_portrayal, 50, 50, 500, 500)
+canvas_element = CanvasGrid(SsAgent_portrayal, 100, 100, 500, 500)
 chart_element = ChartModule([{"Label": "SsAgent", "Color": "#AA0000"}])
 
 server = ModularServer(Sugarscape2ConstantGrowback, [canvas_element, chart_element],
