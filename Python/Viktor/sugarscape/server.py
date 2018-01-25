@@ -4,17 +4,10 @@ from mesa.visualization.modules import CanvasGrid, ChartModule
 from sugarscape.agents import SsAgent, Sugar
 from sugarscape.model import Sugarscape2ConstantGrowback
 
-color_dic = {10: "#042E04",
-             9: "#064506",
-             8: "#075907",
-             7: "#097009",
-             6: "#098209",
-             5: "#0B9C0B",
-             4: "#0DAB0D",
-             3: "#0EC40E",
-             2: "#0FD60F",
-             1: "#11EB11"}
-
+color_dic = {5: "#E74C3C",
+             4: "#ff9900",
+             3: "#00bc8c",
+             2: "#D6F5D6"}
 
 def SsAgent_portrayal(agent):
     if agent is None:
@@ -23,15 +16,17 @@ def SsAgent_portrayal(agent):
     portrayal = {}
 
     if type(agent) is SsAgent:
-        portrayal["Shape"] = "sugarscape/resources/ant.png"
+        portrayal["Shape"] = "sugarscape/resources/dot.png"
         portrayal["scale"] = 0.9
         portrayal["Layer"] = 1
 
     elif type(agent) is Sugar:
-        if agent.amount > 1.0:
+        if 1 < agent.amount < 6:
             portrayal["Color"] = color_dic[int(agent.amount)]
+        elif agent.amount > 4:
+            portrayal["Color"] = "#6f42c1"
         else:
-            portrayal["Color"] = "#D6F5D6"
+            portrayal["Color"] = "#fff"
         portrayal["Shape"] = "rect"
         portrayal["Filled"] = "true"
         portrayal["Layer"] = 0
@@ -41,7 +36,7 @@ def SsAgent_portrayal(agent):
     return portrayal
 
 
-canvas_element = CanvasGrid(SsAgent_portrayal, 100, 100, 500, 500)
+canvas_element = CanvasGrid(SsAgent_portrayal, 50, 50, 500, 500)
 chart_element = ChartModule([{"Label": "SsAgent", "Color": "#AA0000"}])
 
 server = ModularServer(Sugarscape2ConstantGrowback, [canvas_element, chart_element],
