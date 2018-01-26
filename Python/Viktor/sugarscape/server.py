@@ -38,7 +38,7 @@ def SsAgent_portrayal(agent):
 
     return portrayal
 
-n_slider = UserSettableParameter("slider", "Number of agents", 25, 1, 1500, 1)
+n_slider = UserSettableParameter("slider", "Number of agents", 500, 1, 1500, 1)
 beta_c = UserSettableParameter("slider", "Beta Crowd Penalty", 1.4, 0, 5, 0.1)        # Crowd
 beta_d = UserSettableParameter("slider", "Beta Distance Penalty", 1, 0, 5, 0.1)        # Distance
 beta_w = UserSettableParameter("slider", "Beta Waiting Time Penalty", 1, 0, 5, 0.1)    # Waiting Time

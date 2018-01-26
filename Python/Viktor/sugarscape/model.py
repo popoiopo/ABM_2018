@@ -39,9 +39,13 @@ class Sugarscape2ConstantGrowback(Model):
         self.width = width
         self.initial_population = N
         self.bar1 = bar1
+        self.bar1crowd = 0
         self.bar2 = bar2
+        self.bar2crowd = 0
         self.bar3 = bar3
+        self.bar3crowd = 0
         self.bar4 = bar4
+        self.bar4crowd = 0
         self.stage = stage
         self.beta_c = beta_c
         self.beta_w = beta_w
@@ -86,8 +90,30 @@ class Sugarscape2ConstantGrowback(Model):
 
         self.running = True
 
+    def WaitingTime(self, bar):
+        busy = 0
+        (x,y) = bar
+        for dx in range(-4,5):
+            for dy in range(-4,5):
+                x_cor = abs(x+dx)
+                y_cor = abs(y+dy)
+                if x_cor >= self.width:
+                    x_cor = (2*self.width) - (x + dx) - 1
+                if y_cor >= self.height:
+                    y_cor = (2*self.height) - (y + dy) - 1
+                print(x_cor, y_cor)
+                busy += len(self.grid.get_cell_list_contents([(x_cor,y_cor)]))
+        return busy
+
+
+
     def step(self):
         self.WaitingTimes = []
+        self.bar1crowd = self.WaitingTime(self.bar1)
+        self.bar2crowd = self.WaitingTime(self.bar2)
+        self.bar3crowd = self.WaitingTime(self.bar3)
+        self.bar4crowd = self.WaitingTime(self.bar4)
+
         self.schedule.step()
         self.datacollector.collect(self)
         if self.verbose:
@@ -107,3 +133,5 @@ class Sugarscape2ConstantGrowback(Model):
             print('')
             print('Final number Sugarscape Agent: ',
                   self.schedule.get_breed_count(SsAgent))
+
+

@@ -84,13 +84,7 @@ class SsAgent(Agent):
         
         return len(this_cell)
 
-    def WaitingTime(self, bar):
-        busy = 0
-        (x,y) = bar
-        for dx in range(3):
-            for dy in range(-1,2):
-                busy += len(self.model.grid.get_cell_list_contents([(abs(x-dx),y+dy)]))
-        return busy
+
     
     
     # Find best place to go
@@ -112,11 +106,11 @@ class SsAgent(Agent):
 
         if self.beer:
             
-            
-            score_bar1 = self.beta_d*get_distance(pos, self.model.bar1)+self.beta_c*crowd + self.beta_w*self.WaitingTime(self.model.bar1)
-            score_bar2 = self.beta_d*get_distance(pos, self.model.bar2)+self.beta_c*crowd + self.beta_w*self.WaitingTime(self.model.bar2)
-            score_bar3 = self.beta_d*get_distance(pos, self.model.bar3)+self.beta_c*crowd + self.beta_w*self.WaitingTime(self.model.bar3)
-            score_bar4 = self.beta_d*get_distance(pos, self.model.bar4)+self.beta_c*crowd + self.beta_w*self.WaitingTime(self.model.bar4)
+            adjusted_beta_c = self.beta_c - self.waiting*0.01
+            score_bar1 = self.beta_d*get_distance(pos, self.model.bar1)+adjusted_beta_c*crowd + self.beta_w*self.model.bar1crowd
+            score_bar2 = self.beta_d*get_distance(pos, self.model.bar2)+adjusted_beta_c*crowd + self.beta_w*self.model.bar2crowd
+            score_bar3 = self.beta_d*get_distance(pos, self.model.bar3)+adjusted_beta_c*crowd + self.beta_w*self.model.bar3crowd
+            score_bar4 = self.beta_d*get_distance(pos, self.model.bar4)+adjusted_beta_c*crowd + self.beta_w*self.model.bar4crowd
 
             score = min(score_bar1, score_bar2, score_bar3, score_bar4)
             
@@ -335,6 +329,7 @@ class SsAgent(Agent):
 
         if self.beer == True:
             self.waiting += 1
+        
         
         print(self.waiting)
         self.model.WaitingTimes.append(self.waiting)
