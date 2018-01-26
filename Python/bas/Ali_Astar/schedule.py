@@ -19,6 +19,7 @@ class RandomActivationByBreed(RandomActivation):
     def __init__(self, model):
         super().__init__(model)
         self.agents_by_breed = defaultdict(list)
+        self.agentcount = 0
 
     def add(self, agent):
         '''
@@ -27,7 +28,7 @@ class RandomActivationByBreed(RandomActivation):
         Args:
             agent: An Agent to be added to the schedule.
         '''
-
+        self.agentcount += 1
         self.agents.append(agent)
         agent_class = type(agent)
         self.agents_by_breed[agent_class].append(agent)

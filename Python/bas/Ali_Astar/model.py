@@ -21,18 +21,22 @@ def A_star(self, location_point, location_name, blocks, distance_coefficent, m_r
     pos = location_point
     node_list = []
     check_list = []
+    max_list = []
 
-    distance_coefficent = 0
+    distance_coefficent = 1
     m_range_coefficent = 1
 
     this_cell = self.grid.get_cell_list_contents(pos)
     for agent in this_cell:
         if type(agent) is nodeAgent and agent.block is False and agent.locations[location_name] == -1:
-            agent.locations[location_name] = 0
+            check_list.append(pos)
+            node_list.append((pos, 0.000001))
+            agent.locations[location_name] = 0.000001
+            max_list.append(0.000001)
 
     neighbor_positions = self.grid.get_neighborhood(
             pos,
-            moore=True,
+            moore=False,
             include_center=False)
 
     m_range = 1
@@ -44,7 +48,7 @@ def A_star(self, location_point, location_name, blocks, distance_coefficent, m_r
                     if type(agent) is nodeAgent:
                         if agent.block is False and agent.locations[location_name] == -1:
                             dist = get_distance(location_point, neighbor_positions[i])
-                            agent.locations[location_name] = m_range + distance_coefficent * dist
+                            agent.locations[location_name] = (m_range_coefficent * m_range) + (distance_coefficent * dist)
 
     while(True):
 
@@ -68,7 +72,7 @@ def A_star(self, location_point, location_name, blocks, distance_coefficent, m_r
 
                 # if  digonal move, add cost of 1.4 else add cost of 1
                 if math.fabs(dx) == 1 and math.fabs(dy) == 1:
-                    node_list.append((neighbor_positions[i], m_range+1.4))
+                    node_list.append((neighbor_positions[i], m_range+1))
                 else:
                     node_list.append((neighbor_positions[i], m_range+1))
 
@@ -81,8 +85,10 @@ def A_star(self, location_point, location_name, blocks, distance_coefficent, m_r
 
                             dist = get_distance(location_point, neighbor_positions[i])
                             agent.locations[location_name] = (m_range_coefficent * m_range) + (distance_coefficent * dist)
+                            max_list.append((m_range_coefficent * m_range) + (distance_coefficent * dist))
 
         if len(node_list) == 0:
+            # print(min(max_list), max(max_list))
             return
 
 
@@ -105,7 +111,13 @@ class Model(Model):
     '''
     def __init__(self, N, domain_size):
         super().__init__()
+        self.max_Astar = 0
         self.num_agents = N
+        self.partyRatio = .6
+        self.maxAstar_pref = 35
+        self.partyN = self.num_agents * self.partyRatio
+        self.partyRest = self.num_agents - self.partyN
+        self.dist_step = self.maxAstar_pref / self.partyRest
         self.grid = MultiGrid(domain_size, domain_size, False)
         self.schedule = BaseScheduler(self)
 
@@ -135,7 +147,6 @@ class Model(Model):
             for e in b:
                 self.blocks.append(e)
 
-  
         create_block(self, self.blocks, location_names)
 
         for r in range(len(locations)):
@@ -143,7 +154,7 @@ class Model(Model):
             x = locations[r][0]
             y = locations[r][1]
 
-            moore_range = 4
+            moore_range = 1
             for i in range(1, moore_range):
                 for j in range(2*i+1):
 
@@ -174,10 +185,8 @@ class Model(Model):
         #         text_file.write(str(i))
 
         commuters_list = []
-        agentId = 0
         for k in range(self.num_agents):
-            a = commuterAgent(agentId, self, location_names[0])
-            agentId += 1
+            a = commuterAgent(k, self, location_names[0])
             # b = commuterAgent(agentId, self, location_names[0])
             # agentId += 1
             # c = commuterAgent(agentId, self, location_names[0])

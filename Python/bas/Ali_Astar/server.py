@@ -5,25 +5,39 @@ from model import Model
 import model
 import agents
 import randomcolor
-
+from colour import Color
 
 def agent_portrayal(agent):
 
     portrayal = {"Shape": "circle",
                  "Filled": "true",
-                 "r": 1}
+                 "r": 1,
+                 "Layer": 0}
 
-    if type(agent) is agents.nodeAgent:
-        portrayal["Color"] = "white"
-        portrayal["Layer"] = 0
+    if type(agent) is agents.nodeAgent and agent.block is False:
 
-    if type(agent) is agents.nodeAgent and agent.block is True:
-        portrayal["Color"] = "black"
-        portrayal["Layer"] = 0
+        max_star = 300
 
-    if type(agent) is agents.POIAgent:
-        portrayal["Color"] = "red"
+        # Average Coloring
+        test = agent.locations["STAGE"] + agent.locations["BAR"] + agent.locations["WC"]
+        portrayal["Color"] = Color(hue=(test / max_star) * -1 + 1, saturation=(test / max_star) * -1 + 1, luminance=(test / max_star) * -1 + 1).hex
+
+        # Coloring single area (stage)
+        # portrayal["Color"] = Color(hue=(agent.locations["STAGE"] / max_star) * -1 + 1, saturation=(agent.locations["STAGE"] / max_star) * -1 + 1, luminance=(agent.locations["STAGE"] / max_star) * -1 + 1).hex
+        # portrayal["Color"] = Color(hue=(30) * -1 + 1, saturation=(agent.locations["STAGE"] / max_star) * -1 + 1, luminance=(agent.locations["STAGE"] / max_star) * -1 + 1).hex
+
+        # Running general simulation
+        # portrayal["Color"] = "white"
         portrayal["Layer"] = 1
+        portrayal["r"] = 2
+
+    # if type(agent) is agents.nodeAgent and agent.block is True:
+    #     # portrayal["Color"] = "black"
+    #     portrayal["Layer"] = 0
+
+    # if type(agent) is agents.POIAgent:
+    #     # portrayal["Color"] = "red"
+    #     portrayal["Layer"] = 1
 
     if type(agent) is agents.commuterAgent and agent.layer is "BAR":
         # portrayal["Color"] = randomcolor.RandomColor(agent.unique_id + 1).generate()
@@ -38,14 +52,13 @@ def agent_portrayal(agent):
     if type(agent) is agents.commuterAgent and agent.layer is "WC":
         # portrayal["Color"] = randomcolor.RandomColor(agent.unique_id + 1).generate()
         portrayal["Color"] = "brown"
-        portrayal["Layer"] = 4 
+        portrayal["Layer"] = 4
 
     # if agent.wealth > 0:
     #     portrayal["Color"] = "red"
     #     portrayal["Layer"] = 0
 
     return portrayal
-
 
 n_slider = UserSettableParameter("slider", "Number of agents", 25, 1, 1500, 1)
 domain_size = UserSettableParameter("slider", "GridSize", 50, 50, 50, 1)

@@ -48,20 +48,25 @@ class commuterAgent(Agent):
         self.state = 'JUST_ARRIVED'
         self.action = 'DO_NOTHING'
         self.layer = "STAGE"
-        self.WAITING_TIME_AT_BAR =0
+        # print(model.dist_step, model.partyN, self.unique_id)
+        if unique_id <= model.partyN:
+            self.drawnTo = 0
+        else:
+            self.drawnTo = (self.unique_id - model.partyN) * model.dist_step
+            # self.drawnTo =
+        # print(self.drawnTo)
+        self.WAITING_TIME_AT_BAR = 0
         self.WAITING_TIME_AT_WC = 0
         self.density_coefficent = 2
-        self.POI_dict = {'STAGE': (26, 49),'BAR': (40, 10), 'WC': (5, 7)}
-
-        #self.destination = destination
+        self.POI_dict = {'STAGE': (26, 49), 'BAR': (40, 10), 'WC': (5, 7)}
 
     def move(self, destination):
+        # print(self.drawnTo)
 
         possible_steps = self.model.grid.get_neighborhood(
             self.pos,
             moore=True,
             include_center=False)
-
 
         cost_pos_list = []
 
@@ -70,13 +75,8 @@ class commuterAgent(Agent):
             this_cell = self.model.grid.get_cell_list_contents(possible_steps[i])
             for agent in this_cell:
 
-                    # if type(agent) is type(self):
-                    #     break
-
                     if type(agent) is nodeAgent:
-
-                        if agent.locations[destination]:
-                            cost_pos_list.append((agent.locations[destination], possible_steps[i]))
+                        cost_pos_list.append((agent.locations[destination], possible_steps[i]))
 
             for k in range(len(cost_pos_list)):
                 position = cost_pos_list[k][1]
@@ -85,65 +85,48 @@ class commuterAgent(Agent):
 
         neighbor_list = self.model.grid.get_neighbors(self.pos, True, False, 1)
 
-        # if self.unique_id == 1:
-        #     print("########################################")
-        #     print(self.unique_id)
-        #     print(self.pos)
-
         for neighbor in neighbor_list:
-            if type(neighbor) == commuterAgent and  neighbor.layer == self.layer :
+            if type(neighbor) == commuterAgent and neighbor.layer == self.layer:
                 for cost_pos_tuple in cost_pos_list:
                     if neighbor.pos == cost_pos_tuple[1]:
                         cost_pos_list = list(filter(lambda a: a != cost_pos_tuple, cost_pos_list))
 
         cost_pos_list.append((200, self.pos))
-        # if self.unique_id == 1:
-        print(cost_pos_list)
+
         best_cost = min(cost_pos_list, key=lambda x: x[0])[0]
         candidate_list = []
-
-        # candidate_list = sorted([candidate_list, key=lambda x: x[0])
 
         for k in range(len(cost_pos_list)):
             if cost_pos_list[k][0] == best_cost:
                 candidate_list.append(cost_pos_list[k][1])
 
-        # random.seed(5)
         random.shuffle(candidate_list)
         new_position = candidate_list[0]
-        # if self.unique_id == 1:
-        #     print(candidate_list)
-        #     for i in cost_pos_list:
-        #         if new_position in i:
-        #             print(i)
         self.model.grid.move_agent(self, new_position)
 
-
-    def getNextAction(self, state,POI_dict):
+    def getNextAction(self, state, POI_dict):
 
         state = self.state
         action = self.action
         layer = self.layer
         random.seed()
 
-
-
         if state == 'JUST_ARRIVED':
 
-            possible_actions = ['GO_TO_STAGE','GO_TO_WC','GO_TO_BAR']
-            possible_actions_probablities = [0.9999999,0.00000005, 0.005]
+            possible_actions = ['GO_TO_STAGE', 'GO_TO_WC', 'GO_TO_BAR']
+            possible_actions_probablities = [0.9999999, 0.00000005, 0.005]
 
-            rand = random.uniform(0,1)
-            if rand <= possible_actions_probablities[0] :
+            rand = random.uniform(0, 1)
+            if rand <= possible_actions_probablities[0]:
 
                 state = 'MOVING_TO_STAGE'
                 action = 'GO_TO_STAGE'
                 layer = "STAGE"
                 self.move('STAGE')
 
-            elif  (rand > possible_actions_probablities[0] \
-                and rand <= (possible_actions_probablities[0] + possible_actions_probablities[1])  ):
-                    
+            elif (rand > possible_actions_probablities[0] and rand <=
+                    (possible_actions_probablities[0] + possible_actions_probablities[1])):
+
                 state = 'MOVING_TO_WC'
                 action = 'GO_TO_WC'
                 layer = "WC"
@@ -151,11 +134,10 @@ class commuterAgent(Agent):
 
             else:
 
-                state ='MOVING_TO_BAR'
+                state = 'MOVING_TO_BAR'
                 action = 'GO_TO_BAR'
                 layer = "BAR"
                 self.move('BAR')
-
 
         if state == 'BEING_AT_BAR':
 
@@ -167,26 +149,24 @@ class commuterAgent(Agent):
 
             else:
 
-                self.WAITING_TIME_AT_BAR  = 6
+                self.WAITING_TIME_AT_BAR = 6
                 state = 'MOVING_TO_STAGE'
-                layer= "STAGE"
+                layer = "STAGE"
                 self.move('STAGE')
 
-            
         if state == 'BEING_AT_WC':
 
             if self.WAITING_TIME_AT_WC <= 5:
 
                 self.WAITING_TIME_AT_WC += 1
                 action = 'DO_NOTHING'
-                layer ="WC"
-
+                layer = "WC"
 
             else:
 
                 self.WAITING_TIME_AT_WC = 6
                 state = 'MOVING_TO_STAGE'
-                layer = "STAGE" 
+                layer = "STAGE"
                 self.move('STAGE')
 
         if state == "MOVING_TO_STAGE":
@@ -195,18 +175,15 @@ class commuterAgent(Agent):
             layer = "STAGE"
             self.move('STAGE')
 
-
-
-            effort_distance =(10,1000)
-        # here we will have inner states at stage, for example try to get closer, if they see empty spaces   
+            # effort_distance = (10, 1000)
+        # here we will have inner states at stage, for example try to get closer, if they see empty spaces
 
             # TO DO HOW to place the agents when they arrive
-            if get_distance(self.pos,POI_dict['STAGE']) <= 20:
+            if get_distance(self.pos, POI_dict['STAGE']) <= 20:
                 state = "BEING_AT_STAGE"
-            #else:
-            # try to get closer to location, in 5 attempts, otherwise, 
-            # change state to AT stage, and record your happiness, by your distance from stage.     
-
+            # else:
+            # try to get closer to location, in 5 attempts, otherwise,
+            # change state to AT stage, and record your happiness, by your distance from stage.
 
         if state == 'MOVING_TO_BAR':
 
@@ -214,67 +191,60 @@ class commuterAgent(Agent):
                 state = "BEING_AT_BAR"
 
             action = 'GO_TO_BAR'
-            layer ="BAR"
+            layer = "BAR"
             self.move('BAR')
-
-
 
         if state == 'MOVING_TO_WC':
 
-            if get_distance(self.pos,POI_dict['WC']) <= 5:
+            if get_distance(self.pos, POI_dict['WC']) <= 5:
                 state = "BEING_AT_WC"
 
             action = 'GO_TO_WC'
             layer = 'WC'
             self.move('WC')
 
-
         if state == 'BEING_AT_STAGE':
 
-            possible_actions = ['DO_NOTHING','GO_TO_BAR','GO_TO_WC']
-            possible_actions_probablities = [0.01, 0.005, 0.8]
+            pos_act = ['GO_TO_STAGE', 'GO_TO_BAR', 'GO_TO_WC']
+            pos_act_prob = [0.01, 0.005, 0.8]
 
-            rand = random.uniform(0,1)
+            rand = random.uniform(0, 1)
 
-            if rand <= possible_actions_probablities[0]:
-                print("BAR--->",rand)
-                action = 'GO_TO_BAR'
+            if rand <= pos_act_prob[0]:
+
+                action = pos_act[1]
                 state = 'MOVING_TO_BAR'
                 layer = 'BAR'
                 self.move('BAR')
 
-            elif  (rand > possible_actions_probablities[0] and  rand <= (possible_actions_probablities[0] + possible_actions_probablities[1]) ):
+            elif (rand > pos_act_prob[0] and rand <= (pos_act_prob[0] + pos_act_prob[1])):
 
-                print("WC--->",rand)
-                action = 'GO_TO_WC'
+                action = pos_act[2]
                 state = 'MOVING_TO_WC'
-                layer ='WC'
+                layer = 'WC'
                 self.move('WC')
 
-            else: 
+            else:
 
-                print("STAGE--->",rand)
-                #action = 'DO_NOTHING'
-                action = 'GO_TO_STAGE'
+                action = pos_act[0]
                 self.move('STAGE')
                 layer = 'STAGE'
 
         self. state = state
         self. action = action
         self. layer = layer
-        return (state, action) 
-
+        return (state, action)
 
     def step(self):
 
-        if self.unique_id == 1:
-             print("########################################")
-             print(self.unique_id)
-             print(self.pos)
-             #print(self.getNextAction(self.state,self.POI_dict))
-       
-        self.getNextAction(self.state,self.POI_dict)
-        #self.move(self.destination)
+        # if self.unique_id == 1:
+        #     print("########################################")
+        #     print(self.unique_id)
+        #     print(self.pos)
+            # print(self.getNextAction(self.state,self.POI_dict))
+
+        self.getNextAction(self.state, self.POI_dict)
+        # self.move(self.destination)
 
 
 class nodeAgent(Agent):
