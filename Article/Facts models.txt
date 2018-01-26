@@ -1,0 +1,32 @@
+Research-questions:
+- Optimal arrangements for the bar
+- Time they spend to go to the toilet and bar
+- To test the models: make bottleneck-test
+- To test the models: the beerconsumptions should be roughly the same 
+
+Input:
+- Bar-locations 
+- Population-size
+- Beer-need (thirst)
+- Toilet-need
+- Crowd-aversion distance waiting time (?)
+- Waiting-time 
+
+Output:
+- Total beer-consumption (profits)
+- Total waiting time (walking + waiting in line), count the time spent in beer/toilet-mode
+- 
+
+Model Ali/Bas:
+- 10 min per time step
+- Chance of individual in population getting beer/going to toilet 
+- 
+
+Model Viktor:
+- Thirst increases with time
+- Two steps when not in a crowd
+
+Information models:
+- 1 grid cell is 0.75 m2
+- 1 time step is 1 second
+- 
