@@ -38,7 +38,7 @@ def get_commuters_density(self, moore_range, position):
                             if type(k) == commuterAgent:
                                 agent_lst.append(k.unique_id)
 
-    return len(list(set(agent_lst)))
+    return len(list(set(agent_lst)))-1
 
 
 class commuterAgent(Agent):
