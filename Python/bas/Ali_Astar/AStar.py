@@ -90,11 +90,9 @@ def A_star_array(grid_width,grid_height, location_point, blocks, distance_coeffi
         
         neighbor_positions = get_neighbours(cost_list,pos)
 
-        print(len(node_list))
         for pos in neighbor_positions:
 
             
-
             if pos not in blocks and pos not in check_list:
 
                 check_list.append(pos)
@@ -121,7 +119,7 @@ def A_star_node(self, location_point, location_name, blocks, distance_coefficent
 
     this_cell = self.grid.get_cell_list_contents(pos)
     for agent in this_cell:
-        if type(agent) is nodeAgent and agent.block is False and agent.locations[location_name] == -1:
+        if type(agent) is nodeAgent and agent.block is False:
             check_list.append(pos)
             node_list.append((pos, 0))
             agent.locations[location_name] = 0

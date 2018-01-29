@@ -4,36 +4,14 @@ from mesa_own import Model
 from mesa_own.time import BaseScheduler
 from mesa_own.datacollection import DataCollector
 
-
 import random
 import math
 import sys
 import numpy as np
 from agents import *
+
 from AStar import * 
-
-
-sys.setrecursionlimit(20000)
-
-# (x+i,y-i+j,moore_range-i)
-# (x-i,y-i+j,moore_range-i)
-# (x-i+j,y+i,moore_range-i)
-# (x-i+j,y-i,moore_range-i)
-
-
-
-def create_block(self, location_list, POI_locations):
-
-    for i in range(len(location_list)):
-            this_cell = self.grid.get_cell_list_contents(location_list[i])
-
-            for agent in this_cell:
-                if type(agent) is nodeAgent:
-                    agent.block = True
-
-                    for i in POI_locations:
-                        agent.locations[i] = 10000000000
-
+from blocks import *
 
 class Model(Model):
     '''
@@ -53,7 +31,6 @@ class Model(Model):
         self.locations_cost ={}
 
         locations = [ (26, 49),(40, 10), (5, 7)]
-        #location_names = ['POI1', 'POI2', 'POI3']
         location_names = ['STAGE', 'BAR', 'WC']
 
         for i in range(domain_size):
@@ -62,23 +39,8 @@ class Model(Model):
                 nd = nodeAgent((i, j), self, location_names)
                 self.grid.place_agent(nd, (i, j))
 
-        block1 = [(20 + i, 10) for i in range(10)]
-        block2 = [(20, 11), (20, 12), (20, 13), (20, 14)]
-        block3 = [(20 + i, 20) for i in range(10)]
-        block4 = [(20, 41), (20, 42), (20, 43), (20, 44)]
-        block5 = [(25, 20 + i) for i in range(10)]
-        block6 = [(25, 10 + i) for i in range(10)]
-        block7 = [(10, 0 + i) for i in range(10)]
-        block8 = [(0 + i, 30) for i in range(10)]
-        block9 = [(35 + i, 30) for i in range(10)]
-        block10 = [(15+i, 25) for i in range(10)]
-
-        self.blocks = []
-        for b in [block1, block2, block3, block5, block6, block7, block8, block9, block10]:
-            for e in b:
-                self.blocks.append(e)
-
-        create_block(self, self.blocks, location_names)
+        self.blocks = block_positions
+        create_block(self, block_positions, location_names)
 
         for r in range(len(locations)):
 
