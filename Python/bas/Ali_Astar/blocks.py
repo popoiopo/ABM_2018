@@ -13,8 +13,8 @@ def create_block(self, location_list, POI_locations):
                     agent.block = True
 
                     for i in POI_locations:
-                        agent.locations[i] = 10000000000
-
+                        agent.locations[i] = 10000000
+                        						
 
 block_list =[\
 [(20 + i, 10) for i in range(10)],
