@@ -70,13 +70,22 @@ class commuterAgent(Agent):
 
         cost_pos_list = []
 
-        for i in range(len(possible_steps)):
+        # for i in range(len(possible_steps)):
 
-            this_cell = self.model.grid.get_cell_list_contents(possible_steps[i])
-            for agent in this_cell:
+        #     this_cell = self.model.grid.get_cell_list_contents(possible_steps[i])
+        #     for agent in this_cell:
 
-                    if type(agent) is nodeAgent:
-                        cost_pos_list.append((agent.locations[destination], possible_steps[i]))
+        #             if type(agent) is nodeAgent:
+        #                 cost_pos_list.append((agent.locations[destination], possible_steps[i]))
+
+
+        for k in possible_steps:
+            x =k[0]
+            y =k[1]
+            cost_pos_list.append((self.model.locations_cost[destination][x][y], k))
+
+
+
 
             for k in range(len(cost_pos_list)):
                 position = cost_pos_list[k][1]
