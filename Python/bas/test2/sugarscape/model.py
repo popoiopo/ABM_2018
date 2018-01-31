@@ -106,7 +106,7 @@ class HistogramModule(VisualizationElement):
 
     def render(self, model):
         print(model.schedule.get_breed_count(SsAgent))
-        # wealth_vals = [print(agent.SsAgent) for agent in model.schedule.agents]
-        # hist = np.histogram(wealth_vals, bins=self.bins)[0]
-        # return [int(x) for x in hist]
+        wealth_vals = [agent.wealth for agent in model.schedule.agents]
+        hist = np.histogram(wealth_vals, bins=self.bins)[0]
+        return [int(x) for x in hist]
 

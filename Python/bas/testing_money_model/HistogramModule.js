@@ -108,10 +108,12 @@ var HistogramModule = function(bins, canvas_width, canvas_height) {
 
     // Create the chart object
     var chart = new Chart(context).Bar(data, options);
-
+console.log("JS datasets");
     console.log(datasets);
 
     this.render = function(data) {
+      console.log("JS data");
+      console.log(data);
         for (var i in data)
             chart.datasets[0].bars[i].value = data[i];
         console.log(data);

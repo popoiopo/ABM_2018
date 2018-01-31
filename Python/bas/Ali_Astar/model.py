@@ -3,6 +3,7 @@ from mesa_own.space import MultiGrid
 from mesa_own import Model
 from mesa_own.time import BaseScheduler
 from mesa_own.datacollection import DataCollector
+from mesa_own.visualization.ModularVisualization import VisualizationElement
 
 import random
 import math
@@ -10,7 +11,7 @@ import sys
 import numpy as np
 from agents import *
 
-from AStar import * 
+from AStar import *
 from blocks import *
 
 class Model(Model):
@@ -129,3 +130,21 @@ class Model(Model):
     def step(self):
         # self.datacollector.collect(self)
         self.schedule.step()
+
+
+class d3viz(VisualizationElement):
+    print("doe je het?!")
+    package_includes = ["d3.min.js"]
+    local_includes = ["d3viz.js"]
+
+    def __init__(self):
+        new_element = "new d3viz()"
+        new_element = new_element.format()
+        self.js_code = "elements.push(" + new_element + ");"
+
+    def render(self, model):
+        print("MODEL************************")
+        print(dir(model.schedule))
+        print("SELF ########################")
+        print(self)
+        return "data doorgegeven!!!"

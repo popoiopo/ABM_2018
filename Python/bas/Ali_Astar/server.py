@@ -1,3 +1,5 @@
+
+
 from mesa_own.visualization.modules import CanvasGrid
 from mesa_own.visualization.ModularVisualization import ModularServer
 from mesa_own.visualization.UserParam import UserSettableParameter
@@ -6,6 +8,7 @@ import model
 import agents
 import randomcolor
 from colour import Color
+from model import d3viz
 
 def agent_portrayal(agent):
 
@@ -19,11 +22,11 @@ def agent_portrayal(agent):
         max_star = 300
 
         # Average Coloring
-        test = agent.locations["STAGE"] + agent.locations["BAR"] + agent.locations["WC"]
-        portrayal["Color"] = Color(hue=(test / max_star) * -1 + 1, saturation=(test / max_star) * -1 + 1, luminance=(test / max_star) * -1 + 1).hex
+        # test = agent.locations["STAGE"] + agent.locations["BAR"] + agent.locations["WC"]
+        # portrayal["Color"] = Color(hue=(test / max_star) * -1 + 1, saturation=(test / max_star) * -1 + 1, luminance=(test / max_star) * -1 + 1).hex
 
         # Coloring single area (stage)
-        # portrayal["Color"] = Color(hue=(agent.locations["STAGE"] / max_star) * -1 + 1, saturation=(agent.locations["STAGE"] / max_star) * -1 + 1, luminance=(agent.locations["STAGE"] / max_star) * -1 + 1).hex
+        portrayal["Color"] = Color(hue=(agent.locations["STAGE"] / max_star) * -1 + 1, saturation=(agent.locations["STAGE"] / max_star) * -1 + 1, luminance=(agent.locations["STAGE"] / max_star) * -1 + 1).hex
         # portrayal["Color"] = Color(hue=(30) * -1 + 1, saturation=(agent.locations["STAGE"] / max_star) * -1 + 1, luminance=(agent.locations["STAGE"] / max_star) * -1 + 1).hex
 
         # Running general simulation
@@ -74,8 +77,9 @@ def agent_portrayal(agent):
 n_slider = UserSettableParameter("slider", "Number of agents", 150, 1, 1500, 1)
 domain_size = UserSettableParameter("slider", "GridSize", 50, 50, 50, 1)
 grid = CanvasGrid(agent_portrayal, 50, 50, 600, 600)
+d3viz = d3viz()
 
 server = ModularServer(Model,
-                       [grid],
+                       [grid, d3viz],
                        "ABM Project",
                        {"N": n_slider, "domain_size": domain_size})
