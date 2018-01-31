@@ -3,107 +3,15 @@ from mesa_own.space import MultiGrid
 from mesa_own import Model
 from mesa_own.time import BaseScheduler
 from mesa_own.datacollection import DataCollector
+
 import random
 import math
 import sys
 import numpy as np
 from agents import *
-sys.setrecursionlimit(20000)
 
-# (x+i,y-i+j,moore_range-i)
-# (x-i,y-i+j,moore_range-i)
-# (x-i+j,y+i,moore_range-i)
-# (x-i+j,y-i,moore_range-i)
-
-
-def A_star(self, location_point, location_name, blocks, distance_coefficent, m_range_coefficent):
-
-    pos = location_point
-    node_list = []
-    check_list = []
-    max_list = []
-
-    distance_coefficent = 1
-    m_range_coefficent = 1
-
-    this_cell = self.grid.get_cell_list_contents(pos)
-    for agent in this_cell:
-        if type(agent) is nodeAgent and agent.block is False and agent.locations[location_name] == -1:
-            check_list.append(pos)
-            node_list.append((pos, 0.000001))
-            agent.locations[location_name] = 0.000001
-            max_list.append(0.000001)
-
-    neighbor_positions = self.grid.get_neighborhood(
-            pos,
-            moore=False,
-            include_center=False)
-
-    m_range = 1
-    for i in range(len(neighbor_positions)):
-            check_list.append(neighbor_positions[i])
-            node_list.append((neighbor_positions[i], m_range))
-            this_cell = self.grid.get_cell_list_contents(neighbor_positions[i])
-            for agent in this_cell:
-                    if type(agent) is nodeAgent:
-                        if agent.block is False and agent.locations[location_name] == -1:
-                            dist = get_distance(location_point, neighbor_positions[i])
-                            agent.locations[location_name] = (m_range_coefficent * m_range) + (distance_coefficent * dist)
-
-    while(True):
-
-        # find the neighbouring positions
-        this_node = node_list.pop(0)
-        pos = this_node[0]
-        m_range = this_node[1]
-
-        neighbor_positions = self.grid.get_neighborhood(
-            pos,
-            moore=True,
-            include_center=False)
-
-        # for each neighbouring positions, get the contents of that postion
-        for i in range(len(neighbor_positions)):
-            this_cell = self.grid.get_cell_list_contents(neighbor_positions[i])
-
-            if not (neighbor_positions[i] in check_list) and neighbor_positions[i] not in blocks:
-                dx = neighbor_positions[i][0] - pos[0]
-                dy = neighbor_positions[i][1] - pos[1]
-
-                # if  digonal move, add cost of 1.4 else add cost of 1
-                if math.fabs(dx) == 1 and math.fabs(dy) == 1:
-                    node_list.append((neighbor_positions[i], m_range+1))
-                else:
-                    node_list.append((neighbor_positions[i], m_range+1))
-
-                check_list.append(neighbor_positions[i])
-
-                # get the node agent, assign to its location value of i, which refers to the range of moore neighbourhood
-                for agent in this_cell:
-                    if type(agent) is nodeAgent:
-                        if agent.block is False and agent.locations[location_name] == -1:
-
-                            dist = get_distance(location_point, neighbor_positions[i])
-                            agent.locations[location_name] = (m_range_coefficent * m_range) + (distance_coefficent * dist)
-                            max_list.append((m_range_coefficent * m_range) + (distance_coefficent * dist))
-
-        if len(node_list) == 0:
-            # print(min(max_list), max(max_list))
-            return
-
-
-def create_block(self, location_list, POI_locations):
-
-    for i in range(len(location_list)):
-            this_cell = self.grid.get_cell_list_contents(location_list[i])
-
-            for agent in this_cell:
-                if type(agent) is nodeAgent:
-                    agent.block = True
-
-                    for i in POI_locations:
-                        agent.locations[i] = 10000000000
-
+from AStar import * 
+from blocks import *
 
 class Model(Model):
     '''
@@ -120,9 +28,9 @@ class Model(Model):
         self.dist_step = self.maxAstar_pref / self.partyRest
         self.grid = MultiGrid(domain_size, domain_size, False)
         self.schedule = BaseScheduler(self)
+        self.locations_cost ={}
 
         locations = [ (26, 49),(40, 10), (5, 7)]
-        #location_names = ['POI1', 'POI2', 'POI3']
         location_names = ['STAGE', 'BAR', 'WC']
 
         for i in range(domain_size):
@@ -131,23 +39,10 @@ class Model(Model):
                 nd = nodeAgent((i, j), self, location_names)
                 self.grid.place_agent(nd, (i, j))
 
-        block1 = [(20 + i, 10) for i in range(10)]
-        block2 = [(20, 11), (20, 12), (20, 13), (20, 14)]
-        block3 = [(20 + i, 20) for i in range(10)]
-        block4 = [(20, 41), (20, 42), (20, 43), (20, 44)]
-        block5 = [(25, 20 + i) for i in range(10)]
-        block6 = [(25, 10 + i) for i in range(10)]
-        block7 = [(10, 0 + i) for i in range(10)]
-        block8 = [(0 + i, 30) for i in range(10)]
-        block9 = [(35 + i, 30) for i in range(10)]
-        block10 = [(15+i, 25) for i in range(10)]
+        self.blocks = block_positions
+        create_block(self, block_positions, location_names)
 
-        self.blocks = []
-        for b in [block1, block2, block3, block5, block6, block7, block8, block9, block10]:
-            for e in b:
-                self.blocks.append(e)
 
-        create_block(self, self.blocks, location_names)
 
         for r in range(len(locations)):
 
@@ -167,7 +62,19 @@ class Model(Model):
                                 poi = POIAgent(coords, self, moore_range-i)
                                 self.grid.place_agent(poi, coords)
 
-            A_star(self, (x, y), location_names[r], self.blocks, 0.5, 2)
+            A_star_node(self, (x, y), location_names[r], self.blocks, 0.5, 2)
+
+            self.locations_cost[location_names[r]] =  A_star_array(domain_size,domain_size, (x, y), self.blocks, 0.5, 2)
+
+
+
+            locations_all = [(i,j) for i in range(domain_size) for j in range(domain_size)]
+
+            # write all the contents in a file. 
+            # for p in locations_all:
+            #     print(p)
+            #     self.locations_cost[p] =  A_star_array(domain_size,domain_size, (x, y), self.blocks, 0.5, 2)
+
         # array_plop = np.zeros((50, 50))
         # for i in range(50):
         #     for j in range(50):
