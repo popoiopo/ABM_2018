@@ -196,5 +196,8 @@ class BatchRunner:
         ordered.sort_values(by='Run', inplace=True)
         if self._include_fixed:
             for param in self.fixed_parameters.keys():
+                print('######################')
+                print(param)
                 ordered[param] = self.fixed_parameters[param]
+
         return ordered

@@ -26,7 +26,7 @@ class Sugarscape2ConstantGrowback(Model):
 
     verbose = True  # Print-monitoring
 
-    def __init__(self, N, beta_c, beta_d, beta_w, beer_consumption, height=50, width=50, bar1 = (49, 40), bar2 = (49, 1), bar3 = (49, 18), bar4 = (0,18), stage = (24, 49)):
+    def __init__(self, N, beta_c, beta_d, beta_w, beer_consumption, serving_speed, height=34, width=18, bar1_y = 5 , bar2_y = 7, stage = (9, 33)):
         '''
         Create a new Constant Growback model with the given parameters.
 
@@ -38,26 +38,28 @@ class Sugarscape2ConstantGrowback(Model):
         self.height = height
         self.width = width
         self.initial_population = N
-        self.bar1 = bar1
+        self.bar1 = (0, bar1_y)
         self.bar1crowd = 0
-        self.bar2 = bar2
+        self.bar2 = (17,bar1_y)
         self.bar2crowd = 0
-        self.bar3 = bar3
+        self.bar3 = (0,bar2_y)
         self.bar3crowd = 0
-        self.bar4 = bar4
+        self.bar4 = (17,bar2_y)
         self.bar4crowd = 0
         self.stage = stage
         self.beta_c = beta_c
         self.beta_w = beta_w
         self.beta_d = beta_d
         self.beer_consumption = beer_consumption
+        self.serving_speed = serving_speed
         self.WaitingTimes = []
+        self.MaxAgents = 0
 
         self.schedule = RandomActivationByBreed(self)
-        self.grid = MultiGrid(self.height, self.width, torus=False)
+        self.grid = MultiGrid(self.width, self.height, torus=False)
         #self.datacollector = DataCollector({"SsAgent": lambda m: m.schedule.get_breed_count(SsAgent), })
         
-        self.datacollector = DataCollector({"Waiting": lambda m: m.schedule.AverageWaitingTime(self.WaitingTimes, self.initial_population)})
+        self.datacollector = DataCollector({"Waiting": lambda m: m.schedule.AverageWaitingTime(True)})
 
         # Create sugar
         import numpy as np
@@ -65,19 +67,19 @@ class Sugarscape2ConstantGrowback(Model):
         
         # Create agent:
         for i in range(self.initial_population):
-            x = random.randrange(self.width)
-            y = random.randrange(self.height)
-            sugar = random.randrange(6, 25)
-            metabolism = random.randrange(2, 4)
+            #x = random.randrange(self.width)
+            #y = random.randrange(self.height)
+            
+            x = 7 + int(5*np.random.random())
+            y = 0
             vision = 2
-            toilet_need = np.random.random()
-            ssa = SsAgent((x, y), self,beta_c, beta_d, beta_w, beer_consumption, True, sugar, metabolism, vision)
+            ssa = SsAgent((x, y), self,beta_c, beta_d, beta_w, beer_consumption, serving_speed, True, vision)
             self.grid.place_agent(ssa, (x, y))
             self.schedule.add(ssa)
         
         
         # sugar_distribution = np.genfromtxt("sugarscape/sugar-map.txt")
-        sugar_distribution = np.zeros([self.height,self.width])
+        sugar_distribution = np.zeros([self.width,self.height])
         for x in range(self.width):
             for y in range(self.height):
                 sugar_distribution[x,y] = 0
@@ -101,7 +103,6 @@ class Sugarscape2ConstantGrowback(Model):
                     x_cor = (2*self.width) - (x + dx) - 1
                 if y_cor >= self.height:
                     y_cor = (2*self.height) - (y + dy) - 1
-                print(x_cor, y_cor)
                 busy += len(self.grid.get_cell_list_contents([(x_cor,y_cor)]))
         return busy
 
@@ -120,14 +121,16 @@ class Sugarscape2ConstantGrowback(Model):
             print([self.schedule.time,
                    self.schedule.get_breed_count(SsAgent)])
 
-    def run_model(self, step_count=200):
+    def run_model(self, step_count=10):
 
         if self.verbose:
             print('Initial number Sugarscape Agent: ',
                   self.schedule.get_breed_count(SsAgent))
-
+    
         for i in range(step_count):
+            print(step_count)
             self.step()
+        
 
         if self.verbose:
             print('')

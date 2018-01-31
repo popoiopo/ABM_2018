@@ -19,6 +19,7 @@ class RandomActivationByBreed(RandomActivation):
     def __init__(self, model):
         super().__init__(model)
         self.agents_by_breed = defaultdict(list)
+        self.IntegralWT = []
 
     def add(self, agent):
         '''
@@ -79,7 +80,12 @@ class RandomActivationByBreed(RandomActivation):
         return len(self.agents_by_breed[breed_class])
 
 
-    def AverageWaitingTime(self, list, popsize):
-        print('######################')
-        print(list)
-        return sum(list)/popsize
+    def AverageWaitingTime(self, integral):
+        WT = sum(self.model.WaitingTimes)/self.model.initial_population
+        self.IntegralWT.append(WT)
+        if integral:
+            return sum(self.IntegralWT)/self.time
+        return WT
+
+    def MaxAgents(self):
+        return self.model.MaxAgents

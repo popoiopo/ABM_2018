@@ -38,21 +38,21 @@ def SsAgent_portrayal(agent):
 
     return portrayal
 
-n_slider = UserSettableParameter("slider", "Number of agents", 500, 1, 1500, 1)
-beta_c = UserSettableParameter("slider", "Beta Crowd Penalty", 1.4, 0, 5, 0.1)        # Crowd
+n_slider = UserSettableParameter("slider", "Number of agents", 1000, 1, 1500, 1)
+beta_c = UserSettableParameter("slider", "Beta Crowd Penalty", 1.9, 0, 5, 0.1)        # Crowd
 beta_d = UserSettableParameter("slider", "Beta Distance Penalty", 1, 0, 5, 0.1)        # Distance
-beta_w = UserSettableParameter("slider", "Beta Waiting Time Penalty", 1, 0, 5, 0.1)    # Waiting Time
-beer_consumption = UserSettableParameter("slider", "Beer Consumption Rate", 0.002, 0, 0.05, 0.001)
-domain_size = UserSettableParameter("slider", "GridSize", 50, 50, 50, 1)
+beta_w = UserSettableParameter("slider", "Beta Waiting Time Penalty", 0.5, 0, 5, 0.1)    # Waiting Time
+beer_consumption = UserSettableParameter("slider", "Beer Consumption Rate", 0.00083333, 0, 0.005, 0.00005)
+serving_speed = UserSettableParameter("slider", "Serving Speed Bar", 0.20, 0, 1, 0.01)
 #canvas_element = CanvasGrid(SsAgent_portrayal, 50, 50, 500, 500)
 chart_element = ChartModule([{"Label": "Waiting", "Color": "#AA0000"}])
 
 #server = ModularServer(Sugarscape2ConstantGrowback, [canvas_element, chart_element],
 #"Sugarscape 2 Constant Growback")
-grid = CanvasGrid(SsAgent_portrayal, 50, 50, 600, 600)
+grid = CanvasGrid(SsAgent_portrayal, 18, 34, 250, 500)
 
 server = ModularServer(Sugarscape2ConstantGrowback,
                        [grid, chart_element],
                        "ABM Project",
-                       {"N": n_slider, "beta_c": beta_c, "beta_d":beta_d, "beta_w": beta_w, "beer_consumption": beer_consumption})
-# server.launch()
+                       {"N": n_slider, "beta_c": beta_c, "beta_d":beta_d, "beta_w": beta_w, "beer_consumption": beer_consumption, "serving_speed": serving_speed})
+
