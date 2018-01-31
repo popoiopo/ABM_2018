@@ -42,25 +42,36 @@ def agent_portrayal(agent):
     if type(agent) is agents.commuterAgent and agent.layer is "BAR":
         # portrayal["Color"] = randomcolor.RandomColor(agent.unique_id + 1).generate()
         portrayal["Color"] = "green"
-        portrayal["Layer"] = 2
+        portrayal["Layer"] = 3
+        portrayal["r"] = 1
 
     if type(agent) is agents.commuterAgent and agent.layer is "STAGE":
         # portrayal["Color"] = randomcolor.RandomColor(agent.unique_id + 1).generate()
         portrayal["Color"] = "blue"
-        portrayal["Layer"] = 3
+        portrayal["Layer"] = 4
+        portrayal["r"] = 1
 
     if type(agent) is agents.commuterAgent and agent.layer is "WC":
         # portrayal["Color"] = randomcolor.RandomColor(agent.unique_id + 1).generate()
         portrayal["Color"] = "brown"
-        portrayal["Layer"] = 4
+        portrayal["Layer"] = 5
+        portrayal["r"] = 1
 
-    # if agent.wealth > 0:
-    #     portrayal["Color"] = "red"
-    #     portrayal["Layer"] = 0
+    if type(agent) is agents.nodeAgent and agent.block  is True:
+        # portrayal["Color"] = randomcolor.RandomColor(agent.unique_id + 1).generate()
+        portrayal["Color"] = "black"
+        portrayal["Layer"] = 6
+        portrayal["r"] = 1
+
+    if type(agent) is agents.POIAgent:
+        # portrayal["Color"] = randomcolor.RandomColor(agent.unique_id + 1).generate()
+        portrayal["Color"] = "green"
+        portrayal["Layer"] = 2
+        portrayal["r"] = 1
 
     return portrayal
 
-n_slider = UserSettableParameter("slider", "Number of agents", 25, 1, 1500, 1)
+n_slider = UserSettableParameter("slider", "Number of agents", 150, 1, 1500, 1)
 domain_size = UserSettableParameter("slider", "GridSize", 50, 50, 50, 1)
 grid = CanvasGrid(agent_portrayal, 50, 50, 600, 600)
 

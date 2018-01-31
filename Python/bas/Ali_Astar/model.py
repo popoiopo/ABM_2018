@@ -42,6 +42,8 @@ class Model(Model):
         self.blocks = block_positions
         create_block(self, block_positions, location_names)
 
+
+
         for r in range(len(locations)):
 
             x = locations[r][0]
@@ -63,6 +65,15 @@ class Model(Model):
             A_star_node(self, (x, y), location_names[r], self.blocks, 0.5, 2)
 
             self.locations_cost[location_names[r]] =  A_star_array(domain_size,domain_size, (x, y), self.blocks, 0.5, 2)
+
+
+
+            locations_all = [(i,j) for i in range(domain_size) for j in range(domain_size)]
+
+            # write all the contents in a file. 
+            # for p in locations_all:
+            #     print(p)
+            #     self.locations_cost[p] =  A_star_array(domain_size,domain_size, (x, y), self.blocks, 0.5, 2)
 
         # array_plop = np.zeros((50, 50))
         # for i in range(50):

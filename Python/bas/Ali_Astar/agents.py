@@ -57,7 +57,7 @@ class commuterAgent(Agent):
         # print(self.drawnTo)
         self.WAITING_TIME_AT_BAR = 0
         self.WAITING_TIME_AT_WC = 0
-        self.density_coefficent = 2
+        self.density_coefficent = 200
         self.POI_dict = {'STAGE': (26, 49), 'BAR': (40, 10), 'WC': (5, 7)}
 
     def move(self, destination):
@@ -85,12 +85,10 @@ class commuterAgent(Agent):
             cost_pos_list.append((self.model.locations_cost[destination][x][y], k))
 
 
-
-
-            for k in range(len(cost_pos_list)):
-                position = cost_pos_list[k][1]
-                density = get_commuters_density(self, 2, position)
-                cost_pos_list[k] = (cost_pos_list[k][0] + (self.density_coefficent * density / self.model.num_agents), cost_pos_list[k][1])
+        for k in range(len(cost_pos_list)):
+            position = cost_pos_list[k][1]
+            density = get_commuters_density(self, 2, position)
+            cost_pos_list[k] = (cost_pos_list[k][0] + (self.density_coefficent * density / self.model.num_agents), cost_pos_list[k][1])
 
         neighbor_list = self.model.grid.get_neighbors(self.pos, True, False, 1)
 
@@ -103,12 +101,16 @@ class commuterAgent(Agent):
         cost_pos_list.append((200, self.pos))
 
         best_cost = min(cost_pos_list, key=lambda x: x[0])[0]
+
+
         candidate_list = []
 
         for k in range(len(cost_pos_list)):
             if cost_pos_list[k][0] == best_cost:
                 candidate_list.append(cost_pos_list[k][1])
 
+        # print("--------------")
+        # print(candidate_list)
         random.shuffle(candidate_list)
         new_position = candidate_list[0]
         self.model.grid.move_agent(self, new_position)

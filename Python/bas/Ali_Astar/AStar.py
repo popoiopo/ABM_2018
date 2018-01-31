@@ -70,7 +70,7 @@ def A_star_array(grid_width,grid_height, location_point, blocks, distance_coeffi
     cost_list  = np.zeros([50,50])
     
     for block_pos in blocks:
-        cost_list[block_pos[0]][block_pos[1]] = 10000000
+        cost_list[block_pos[0]][block_pos[1]] = 10000000000
 
     cost_list[pos[0]][pos[1]] = 0
 
@@ -93,7 +93,7 @@ def A_star_array(grid_width,grid_height, location_point, blocks, distance_coeffi
         for pos in neighbor_positions:
 
             
-            if pos not in blocks and pos not in check_list:
+            if (pos not in blocks) and (pos not in check_list):
 
                 check_list.append(pos)
                 node_list.append((pos, m_range+1))
