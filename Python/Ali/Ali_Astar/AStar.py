@@ -60,11 +60,8 @@ def get_neighbours(cost_list,pos):
     return neighbours
 
 
-def A_star_array(grid_width,grid_height, location_point, blocks, distance_coefficent, m_range_coefficent):
+def A_star_array(grid_width,grid_height, location_point, blocks, distance_coefficent = 0, m_range_coefficent = 1):
 
-
-    distance_coefficent = 0
-    m_range_coefficent = 1
 
     pos = location_point
     node_list = []
@@ -101,7 +98,8 @@ def A_star_array(grid_width,grid_height, location_point, blocks, distance_coeffi
             if (ps not in blocks) and (ps not in check_list):
 
                 check_list.append(ps)
-                node_list.append((ps, m_range+1))
+                #node_list.append((ps, m_range+ get_distance(ps,pos)))
+                node_list.append((ps, m_range+ 1)) 
 
         
         dist = get_distance(location_point, pos)
@@ -120,9 +118,6 @@ def A_star_node(self, location_point, location_name, blocks, distance_coefficent
     check_list = []
     max_list = []
 
-
-    distance_coefficent = 0
-    m_range_coefficent = 1
 
     this_cell = self.grid.get_cell_list_contents(pos)
     for agent in this_cell:

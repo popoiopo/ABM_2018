@@ -24,7 +24,7 @@ def getNextAction(self, state, POI_dict):
 	if state == 'JUST_ARRIVED':
 
 		actions = ['GO_TO_STAGE', 'GO_TO_BAR2', 'GO_TO_BAR']
-		actions_probablities = [0.9999999, 0.00000005, 0.005]
+		actions_probablities = [0.99, 0.005, 0.005]
 
 		rand = random.uniform(0, 1)
 		if rand <= actions_probablities[0]:
@@ -40,7 +40,7 @@ def getNextAction(self, state, POI_dict):
 
 			state = 'MOVING_TO_BAR2'
 
-			self.shortest_time = self.model.POI_cost['BAR'][x][y] -1
+			self.shortest_time = self.model.POI_cost['BAR2'][x][y] -1
 
 			layer = "BAR2"
 			self.total_waiting = 0
@@ -78,25 +78,28 @@ def getNextAction(self, state, POI_dict):
 	elif state == 'BEING_AT_STAGE':
 
 		pos_act = ['GO_TO_STAGE', 'GO_TO_BAR', 'GO_TO_BAR2']
-		pos_act_prob = [0.01, 0.005, 0.8]
+		pos_act_prob = [0.005, 0.005, 0.99]
 
-		rand = random.uniform(0, 1)
+		rand = random.random()
 
 		if rand <= pos_act_prob[0]:
 
 			self.shortest_time = self.model.POI_cost['BAR'][x][y] - 1
 
+			# print("shortest_time",self.shortest_time)
 			state = 'MOVING_TO_BAR'
 			layer = 'BAR'
+			self.total_waiting +=1 
 			self.move('BAR')
 			
 
 		elif (rand > pos_act_prob[0] and rand <= (pos_act_prob[0] + pos_act_prob[1])):
 
-			self.shortest_time = self.model.POI_cost['BAR'][x][y] -1
-
+			self.shortest_time = self.model.POI_cost['BAR2'][x][y] -1
+			# print("shortest_time",self.shortest_time)
 			state = 'MOVING_TO_BAR2'
 			layer = 'BAR2' 
+			self.total_waiting +=1
 			self.move('BAR2')
 			
 
@@ -110,9 +113,11 @@ def getNextAction(self, state, POI_dict):
 
 	elif state == 'MOVING_TO_BAR':
 
-		if get_distance(self.pos,POI_dict['BAR']) == 1:
+		if get_distance(self.pos,POI_dict['BAR']) <= 2:
 
 			state = "BEING_AT_BAR"
+			self.total_waiting +=1
+			self.WAITING_TIME_AT_POI +=1
 			
 		else:
 			self.total_waiting +=1
@@ -125,7 +130,7 @@ def getNextAction(self, state, POI_dict):
 
 	elif state == 'BEING_AT_BAR':
 
-		if self.WAITING_TIME_AT_POI <= self.model.serving_time['BAR']:
+		if self.WAITING_TIME_AT_POI < self.model.serving_time['BAR']:
 
 			self.total_waiting += 1
 			self.WAITING_TIME_AT_POI += 1
@@ -139,6 +144,11 @@ def getNextAction(self, state, POI_dict):
 			 (self.shortest_time + self.model.serving_time['BAR']) /(self.total_waiting) 
 
 			self.numOfPOIVisits += 1
+			# print(self.numOfPOIVisits)
+			# print(self.utility)
+			# print(self.shortest_time)
+			# print(self.model.serving_time['BAR'])
+			# print(self.total_waiting - self.shortest_time - self.model.serving_time['BAR'])
 			self.total_waiting =0
 			self.WAITING_TIME_AT_POI = 0
 
@@ -152,11 +162,13 @@ def getNextAction(self, state, POI_dict):
 
 	elif state == 'MOVING_TO_BAR2':
 
-		if get_distance(self.pos, POI_dict['BAR2']) == 1:
+		if get_distance(self.pos, POI_dict['BAR2']) <= 2:
 
 			state = "BEING_AT_BAR2"
 			self.total_waiting +=1
+			self.WAITING_TIME_AT_POI +=1
 			
+			####change toal_waiting, to total cost
 
 		else:
 			self.total_waiting +=1
@@ -166,7 +178,7 @@ def getNextAction(self, state, POI_dict):
 
 	elif state == 'BEING_AT_BAR2':
 
-		if self.WAITING_TIME_AT_POI <= self.model.serving_time['BAR2']:
+		if self.WAITING_TIME_AT_POI < self.model.serving_time['BAR2']:
 
 			self.total_waiting += 1
 			self.WAITING_TIME_AT_POI += 1
@@ -176,8 +188,14 @@ def getNextAction(self, state, POI_dict):
 
 			self.utility +=\
 			 (self.shortest_time + self.model.serving_time['BAR2'])/ (self.total_waiting) 
+			
 
 			self.numOfPOIVisits += 1
+			# print(self.numOfPOIVisits)
+			# print(self.utility)
+			# print(self.shortest_time)
+			# print(self.model.serving_time['BAR'])
+			# print(self.total_waiting - self.shortest_time)
 			self.total_waiting =0
 			self.WAITING_TIME_AT_POI = 0
 
@@ -185,8 +203,8 @@ def getNextAction(self, state, POI_dict):
 			layer = "STAGE"
 			self.move('STAGE')
 
-
-
+	# print(self.total_waiting)
+	# print(state)
 	self. state = state
 	self. layer = layer
 	return (state)

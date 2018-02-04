@@ -12,22 +12,17 @@ class commuterAgent(Agent):
 
 
         self.state = 'JUST_ARRIVED'
-        self.action = 'DO_NOTHING'
         self.layer = "STAGE"
-        if unique_id <= model.partyN:
-            self.drawnTo = 0
-        else:
-            self.drawnTo = (self.unique_id - model.partyN) * model.dist_step
+
+
+        # if unique_id <= model.partyN:
+        #     self.drawnTo = 0
+        # else:
+        #     self.drawnTo = (self.unique_id - model.partyN) * model.dist_step
+
 
 
         self.WAITING_TIME_AT_POI = 0
-
-        self.timestep ={'BAR':[0,0],\
-                         'BAR2':[0,0],\
-                         'BAR3':[0,0],\
-                         'BAR4':[0,0] }
-        
-
         self.density_coefficent =  density_coefficent
         self.vision_range = vision_range
 
@@ -67,7 +62,8 @@ class commuterAgent(Agent):
                         cost_pos_list = list(filter(lambda a: a != cost_pos_tuple, cost_pos_list))
 
         cost_pos_list.append((200, self.pos))
-
+        #print("----------------------------")
+        #print(cost_pos_list)
         best_cost = min(cost_pos_list, key=lambda x: x[0])[0]
 
         candidate_list = []
@@ -75,10 +71,10 @@ class commuterAgent(Agent):
         for k in range(len(cost_pos_list)):
             if cost_pos_list[k][0] == best_cost:
                 candidate_list.append(cost_pos_list[k][1])     
-      
+    
         random.shuffle(candidate_list)
         new_position = candidate_list[0]
-       
+        #print(new_position)
         if self.pos != new_position:
             self.model.grid_density[new_position[0]][new_position[1]] += 1 
             self.model.grid_density[self.pos[0]][self.pos[1]] -= 1      

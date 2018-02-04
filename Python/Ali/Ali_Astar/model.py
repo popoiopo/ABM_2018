@@ -18,7 +18,7 @@ class Model(Model):
     '''
     ClubLife, an agent-based-model to simulate club related behaviour.
     '''
-    def __init__(self, N, width, height,distance_coefficent,density_coefficent,density_vision ):
+    def __init__(self, N, width, height,distance_coefficent= 1 ,density_coefficent=2,density_vision=3):
         super().__init__()
 
         self.max_Astar = 0
@@ -40,10 +40,10 @@ class Model(Model):
         self.serving_time = {'BAR': 3, 'BAR2':3, 'BAR3':3, 'BAR4': 3 }  
 
 
-        POI_points = [ (24, 49),(40, 7), (5, 7), (40, 35), (5 ,35) ]
+        POI_points = [ (24, 49),(40, 7), (5, 7) ]
         #POI_points = [ (9, 33),(0, 5), (17, 5), (0,7),(17,7)]
         #POI_names = [ 'STAGE,'BAR1', 'BAR2','BAR3','BAR4']
-        POI_names = ['STAGE', 'BAR', 'BAR2','BAR3','BAR4']
+        POI_names = ['STAGE', 'BAR', 'BAR2']
         POI_dict = {}
         for i in range(len(POI_points)):
             POI_dict[POI_names[i]] = POI_points[i]
@@ -67,7 +67,7 @@ class Model(Model):
 
             #A_star_node(self, (x, y), POI_names[r], self.blocks, 0.5, 2)
             self.POI_cost[POI_names[r]] =\
-              A_star_array(width,height, (x, y), self.blocks, 0.5, 1)
+              A_star_array(width,height, (x, y), self.blocks, distance_coefficent, 1)
        
         commuters_list = []
         for k in range(self.num_agents):
@@ -75,22 +75,30 @@ class Model(Model):
             commuters_list.append(a)
              
 
+        selected_cells =[]
         for commuter in commuters_list:
 
             self.schedule.add(commuter)
 
             notblock = False
-            while(notblock is False):
+            selected_cell = False 
+            while(True):
 
                 x = random.randrange(self.grid.width)
                 y = random.randrange(self.grid.height)
-                this_cell = self.grid.get_cell_list_contents((x, y))
-                for agent in this_cell:
 
-                    if type(agent) is nodeAgent:
-                        if (agent.block is False):
-                            notblock = True
-                            break
+                this_cell = self.grid.get_cell_list_contents((x, y))
+
+                if (x,y) not in self.blocks and (x,y) not in selected_cells:
+
+                    selected_cells.append((x,y))
+                # for agent in this_cell:
+
+                #     if type(agent) is nodeAgent:
+                #         if (agent.block is False):
+                #             notblock = True
+                    break
+
 
             self.grid_density[x][y] +=  1
             self.grid.place_agent(commuter, (x, y))
