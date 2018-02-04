@@ -12,25 +12,25 @@ var HistogramModule = function(bins, canvas_width, canvas_height) {
     // Prep the chart properties and series:
     var datasets = [{
         label: "# of beers",
-        backgroundColor: ['rgba(215,48,39,0.2)',
-                          'rgba(244,109,67,0.2)',
-                          'rgba(253,174,97,0.2)',
-                          'rgba(254,224,144,0.2)',
-                          'rgba(255,255,191,0.2)',
-                          'rgba(224,243,248,0.2)',
-                          'rgba(171,217,233,0.2)',
-                          'rgba(116,173,209,0.2)',
-                          'rgba(69,117,180,0.2)'],
-            borderColor: ['rgba(215,48,39,0.6)',
-                          'rgba(244,109,67,0.6)',
-                          'rgba(253,174,97,0.6)',
-                          'rgba(254,224,144,0.6)',
-                          'rgba(255,255,191,0.6)',
-                          'rgba(224,243,248,0.6)',
-                          'rgba(171,217,233,0.6)',
-                          'rgba(116,173,209,0.6)',
-                          'rgba(69,117,180,0.6)'],
-            data: []
+        backgroundColor: ['rgba(215,48,39,0.7)',
+                          'rgba(244,109,67,0.7)',
+                          'rgba(253,174,97,0.7)',
+                          'rgba(254,224,144,0.7)',
+                          'rgba(255,255,191,0.7)',
+                          'rgba(224,243,248,0.7)',
+                          'rgba(171,217,233,0.7)',
+                          'rgba(116,173,209,0.7)',
+                          'rgba(69,117,180,0.7)'],
+        borderColor: ['rgba(215,48,39,0.9)',
+                      'rgba(244,109,67,0.9)',
+                      'rgba(253,174,97,0.9)',
+                      'rgba(254,224,144,0.9)',
+                      'rgba(255,255,191,0.9)',
+                      'rgba(224,243,248,0.9)',
+                      'rgba(171,217,233,0.9)',
+                      'rgba(116,173,209,0.9)',
+                      'rgba(69,117,180,0.9)'],
+        data: []
     }];
 
     // Add a zero value for each bin
@@ -54,16 +54,12 @@ var HistogramModule = function(bins, canvas_width, canvas_height) {
         }
     };
 
-    console.log(data);
-
     // Create the chart object
-    // var chart = new Chart(context).Bar(data, options);
     var chart = new Chart(context, {
         type: 'bar',
         data: data,
         options: options
     });
-    console.log(chart.data.datasets[0]);
 
     this.render = function(data) {
         for (var i in data)
@@ -74,9 +70,9 @@ var HistogramModule = function(bins, canvas_width, canvas_height) {
     this.reset = function() {
         chart.destroy();
         chart = new Chart(context, {
-        type: 'bar',
-        data: data,
-        options: options
-    });
+            type: 'bar',
+            data: data,
+            options: options
+        });
     };
 };

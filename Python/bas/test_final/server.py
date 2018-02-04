@@ -78,7 +78,7 @@ def agent_portrayal(agent):
 
 n_slider = UserSettableParameter("slider", "Number of agents", 1, 1, 1500, 1)
 grid = CanvasGrid(agent_portrayal, 50, 50, 500, 500)
-chart = ChartModule(250, 500)
+chart = ChartModule(250,500)
 histogram = HistogramModule(list(range(10)), 250, 500)
 
 server = ModularServer(Model,

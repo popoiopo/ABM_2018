@@ -14,6 +14,17 @@ from agents import *
 from AStar import *
 from blocks import *
 
+def compute_wait (model):
+    wait = [agent.beer_wait for agent in model.schedule.agents]
+    wait = list(filter(lambda a: a != 0, wait))
+    N = len(wait)
+    try:
+        ret = int(sum(wait) / N)
+    except ZeroDivisionError:
+        ret = 0
+    print(N, wait, ret)
+    return ret
+
 class Model(Model):
     '''
     ClubLife, an agent-based-model to simulate club related behaviour.
@@ -33,7 +44,8 @@ class Model(Model):
         self.totalwaits = []
         self.locations_cost ={}
         self.datacollector = DataCollector(
-            agent_reporters={"Beerst": lambda a: a.Beers}
+            model_reporters={"Average waiting time" : compute_wait},
+            agent_reporters={"Wait": lambda a: a.beer_wait}
         )
 
         locations = [ (26, 49),(40, 10), (5, 7)]
@@ -128,10 +140,6 @@ class Model(Model):
 
             self.grid.place_agent(commuter, (x, y))
 
-        # self.datacollector = DataCollector(
-        #     model_reporters={"Gini": compute_gini},
-        #     agent_reporters={"Wealth": lambda a: a.wealth})
-
     def step(self):
         self.datacollector.collect(self)
         self.schedule.step()
@@ -151,13 +159,12 @@ class ChartModule(VisualizationElement):
         self.js_code = "elements.push(" + new_element + ");"
 
     def render(self, model):
-        wait = [agent.beer_wait for agent in model.schedule.agents]
-        print(wait)
+        wait = [agent.WaitingTime for agent in model.schedule.agents]
         wait = list(filter(lambda a: a != 0, wait))
-        print(wait)
-        if sum(wait) != 0:
-            self.WaitingTime.append(int(sum(wait)))
-        print(self.WaitingTime)
+        try:
+            self.WaitingTime.append(int(sum(wait) / len(wait)))
+        except ZeroDivisionError:
+            self.WaitingTime.append(0)
         return self.WaitingTime
 
 

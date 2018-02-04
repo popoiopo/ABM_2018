@@ -8,6 +8,7 @@ var ChartModule = function(canvas_width, canvas_height) {
     $("#elements1").append(canvas);
     // Create the context and the drawing controller:
     var context = canvas.getContext("2d");
+    var counter = 0;
 
     // Prep the chart properties and series:
     var datasets = [{
@@ -22,8 +23,33 @@ var ChartModule = function(canvas_width, canvas_height) {
     }];
 
     var data = {
+        labels: [],
         datasets: datasets
     };
+
+    var chart = new Chart(context, {
+        type: 'line',
+        data: data
+    });
+
+    this.render = function(data) {
+        chart.data.labels.push(counter);
+        counter += 1;
+        chart.data.datasets[0].data.push(data[data.length-1]);
+        chart.update();
+    };
+
+    this.reset = function() {
+        chart.destroy();
+        data.labels = [];
+        data.datasets[0].data = [];
+        counter = 0;
+        chart = new Chart(context, {
+          type: 'line',
+          data: data
+        });
+    };
+};
 
     //  var data = {
     //     labels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -59,25 +85,3 @@ var ChartModule = function(canvas_width, canvas_height) {
     //     data: data,
     //     options: options
     // });
-
-    var chart = new Chart(context, {
-      type: 'line',
-      data: data
-    });
-
-    this.render = function(data) {
-      console.log(data);
-      console.log(chart.data);
-        chart.data.datasets[0].data = data;
-        console.log(chart.data.datasets[0].data);
-        chart.update();
-    };
-
-    this.reset = function() {
-        chart.destroy();
-        var chart = new Chart(context, {
-          type: 'line',
-          data: data
-        });
-    };
-};

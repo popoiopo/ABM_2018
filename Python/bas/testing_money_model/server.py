@@ -1,10 +1,10 @@
-from mesa.visualization.modules import CanvasGrid
-from mesa.visualization.ModularVisualization import ModularServer
+from mesa_own.visualization.modules import CanvasGrid
+from mesa_own.visualization.ModularVisualization import ModularServer
 from model import MoneyModel
 from model import HistogramModule
-from mesa.visualization.modules import ChartModule
-from mesa.visualization.UserParam import UserSettableParameter
-from mesa.visualization.ModularVisualization import VisualizationElement
+from mesa_own.visualization.modules import ChartModule
+from mesa_own.visualization.UserParam import UserSettableParameter
+from mesa_own.visualization.ModularVisualization import VisualizationElement
 import numpy as np
 
 def agent_portrayal(agent):

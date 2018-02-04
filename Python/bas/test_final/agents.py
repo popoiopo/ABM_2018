@@ -51,7 +51,7 @@ class commuterAgent(Agent):
 
         # CHANGED IMPORTANT FOR VISUAL
         self.beer_wait = 0
-        self.WaitingTime = [0]
+        self.WaitingTime = 0
         self.Beers = 0
         self.SomethingElse = 99
 
@@ -162,7 +162,7 @@ class commuterAgent(Agent):
             else:
 
                 self.WAITING_TIME_AT_BAR = 0
-                self.WaitingTime.append(self.beer_wait)
+                self.WaitingTime = self.beer_wait
                 self.beer_wait = 0
                 self.Beers += 1
                 state = 'MOVING_TO_STAGE'
