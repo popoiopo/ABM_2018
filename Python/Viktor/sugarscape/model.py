@@ -26,7 +26,7 @@ class Sugarscape2ConstantGrowback(Model):
 
     verbose = True  # Print-monitoring
 
-    def __init__(self, N, beta_c, beta_d, beta_w, beer_consumption, serving_speed, height=34, width=18, bar1_y = 5 , bar2_y = 7, stage = (9, 33)):
+    def __init__(self, N, beta_c, beta_d, beta_w, beer_consumption, serving_speed, height=34, width=18, bar1_y = 21 , bar2_y = 21, stage = (9, 33)):
         '''
         Create a new Constant Growback model with the given parameters.
 
@@ -59,7 +59,7 @@ class Sugarscape2ConstantGrowback(Model):
         self.grid = MultiGrid(self.width, self.height, torus=False)
         #self.datacollector = DataCollector({"SsAgent": lambda m: m.schedule.get_breed_count(SsAgent), })
         
-        self.datacollector = DataCollector({"Waiting": lambda m: m.schedule.AverageWaitingTime(True)})
+        self.datacollector = DataCollector({"Waiting": lambda m: m.schedule.AverageWaitingTime(True), "MaxAgents": lambda m: m.schedule.MaxAgents()})
 
         # Create sugar
         import numpy as np
@@ -97,13 +97,10 @@ class Sugarscape2ConstantGrowback(Model):
         (x,y) = bar
         for dx in range(-4,5):
             for dy in range(-4,5):
-                x_cor = abs(x+dx)
-                y_cor = abs(y+dy)
-                if x_cor >= self.width:
-                    x_cor = (2*self.width) - (x + dx) - 1
-                if y_cor >= self.height:
-                    y_cor = (2*self.height) - (y + dy) - 1
-                busy += len(self.grid.get_cell_list_contents([(x_cor,y_cor)]))
+                x_cor = x+dx
+                y_cor = y+dy
+                if 0 <= x_cor < self.width and 0 <= y_cor < self.height:
+                    busy += len(self.grid.get_cell_list_contents([(x_cor,y_cor)]))
         return busy
 
 

@@ -38,12 +38,12 @@ def SsAgent_portrayal(agent):
 
     return portrayal
 
-n_slider = UserSettableParameter("slider", "Number of agents", 1000, 1, 1500, 1)
+n_slider = UserSettableParameter("slider", "Number of agents", 750, 1, 1500, 1)
 beta_c = UserSettableParameter("slider", "Beta Crowd Penalty", 1.9, 0, 5, 0.1)        # Crowd
 beta_d = UserSettableParameter("slider", "Beta Distance Penalty", 1, 0, 5, 0.1)        # Distance
 beta_w = UserSettableParameter("slider", "Beta Waiting Time Penalty", 0.5, 0, 5, 0.1)    # Waiting Time
 beer_consumption = UserSettableParameter("slider", "Beer Consumption Rate", 0.00083333, 0, 0.005, 0.00005)
-serving_speed = UserSettableParameter("slider", "Serving Speed Bar", 0.20, 0, 1, 0.01)
+serving_speed = UserSettableParameter("slider", "Serving Speed Bar", 0.1, 0, 1, 0.01)
 #canvas_element = CanvasGrid(SsAgent_portrayal, 50, 50, 500, 500)
 chart_element = ChartModule([{"Label": "Waiting", "Color": "#AA0000"}])
 

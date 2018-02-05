@@ -83,8 +83,11 @@ class RandomActivationByBreed(RandomActivation):
     def AverageWaitingTime(self, integral):
         WT = sum(self.model.WaitingTimes)/self.model.initial_population
         self.IntegralWT.append(WT)
+        
         if integral:
+            
             return sum(self.IntegralWT)/self.time
+        
         return WT
 
     def MaxAgents(self):
