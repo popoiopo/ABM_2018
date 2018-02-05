@@ -19,7 +19,7 @@
     <meta name="twitter:url" content="" />
     <meta name="twitter:card" content="" />
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <!-- <link rel="shortcut icon" type="image/x-icon" href="/static/images/party.png"/> -->
+    <link rel="shortcut icon" type="image/x-icon" href="/static/images/party.png"/>
     <link href='https://fonts.googleapis.com/css?family=Raleway:400,300,600,400italic,700' rel='stylesheet' type='text/css'>
 
     <link href="/static/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
@@ -50,9 +50,9 @@
 	them to the associated function to render. -->
 
 </head>
-<body>
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
 
-    <div id="page">
+<div id="page">
     <section id="header">
     <!-- Navbar -->
     <nav class="navbar navbar-default navbar-fixed-top">
@@ -99,7 +99,7 @@
         </div>
     </div>
 
-<!--     <header id="gtco-header" class="gtco-cover" role="banner" style="background-image:url(/static/images/party.jpg);">
+    <header id="gtco-header" class="gtco-cover" role="banner" style="background-image:url(/static/images/party.jpg);">
         <div class="overlay"></div>
         <div class="gtco-container">
             <div class="row">
@@ -109,78 +109,39 @@
                             <h1>Welcome to ClubLife</h1>
                             <h2>Made by Bas Ch&#226;tel, Ali Reza, Mike La Grouw, Sara Neven and Viktor van der Valk</h2>
                             <p>
-                                <a href="#visualizations" class="btn btn-primary btn-lg">Straight to the model</a>
-                                <a href="https://github.com/popoiopo/ABM_2018/blob/master/Reading%20used/agent-based_behavior.pdf" class="btn btn-secondary btn-lg" target="_blank">Click here for the report</a>
+                                <a href="https://github.com/popoiopo/ABM_2018/blob/master/Reading%20used/agent-based_behavior.pdf" class="btn btn-primary btn-lg" target="_blank">Click here for the report</a>
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </header> -->
-    
+    </header>
     </section>
-<!--
-    <div id="gtco-features">
+    <section id="visualizations">
         <div class="gtco-container">
-            <div class="row">
-                <div class="col-md-4 col-sm-4">
-                    <div class="feature-center animate-box" data-animate-effect="fadeIn">
-                        <span class="icon">
-                            <i class="icon-lab-flask"></i>
-                        </span>
-                        <h3>Thing One</h3>
-                        <p>Lets learn some stuff</p>
+            <div class="row animate-box">
+                <div class="col-md-8 col-md-offset-2 text-center" style="margin-bottom:0px; margin-top: 50px;">
+                    <h2>Welcome to Clublife</h2>
+                    <p>An interactive Agent-Based-Modeling tool for searching </p>
+                </div>
+                <div id="elements-topbar">
+                    <div class="input-group input-group-lg">
+                        <label class="label label-primary" for="fps" style="margin-right: 15px">Frames Per Second</label>
+                        <input id="fps" data-slider-id='fps' type="text" />
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-4">
-                    <div class="feature-center animate-box" data-animate-effect="fadeIn">
-                        <span class="icon">
-                            <i class="icon-heart"></i>
-                        </span>
-                        <h3>Thing two</h3>
-                        <p>Even more stuff!</p>                   </div>
-                </div>
-                <div class="col-md-4 col-sm-4">
-                    <div class="feature-center animate-box" data-animate-effect="fadeIn">
-                        <span class="icon">
-                            <i class="icon-emoji-happy"></i>
-                        </span>
-                        <h3>Thing Three</h3>
-                        <p>AAAAAIGHT</p>
+                <div class="container-fluid" style="margin-bottom:0px; margin-top: 50px;">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="sidebar"></div>
+                    <div class="row">
+                        <div class="col-sm-6" id="elements"></div>
+                        <div class="col-sm-6" id="elements1"></div>
                     </div>
                 </div>
             </div>
         </div>
-    </div> -->
-<!--     <div class="gtco-container">
-        
-            <div class="col-md-8 col-md-offset-2 text-center gtco-heading" style="margin-bottom:0px; margin-top: 50px;">
-                <h2>Welcome to Clublife</h2>
-                <p>An interactive Agent-Based-Modeling tool for searching </p>
-            </div>
-        </div>
-    </div> -->
-    <div class="gtco-container" id="visualizations">
-        <div class="row animate-box">
-            <div class="col-md-8 col-md-offset-2 text-center" style="margin-bottom:0px; margin-top: 50px;">
-                <h2>Welcome to Clublife</h2>
-                <p>An interactive Agent-Based-Modeling tool for searching </p>
-            </div>
-            <div class="container"  id="visualizations" style="margin-bottom:0px; margin-top: 50px;">
-                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-3" id="sidebar"></div>
-                <div class="col-lg-8 col-md-8 col-sm-8 col-xs-9" id="elements">
-                    <div id="elements-topbar">
-                        <div class="input-group input-group-lg">
-                            <label class="label label-primary" for="fps" style="margin-right: 15px">Frames Per Second</label>
-                            <input id="fps" data-slider-id='fps' type="text" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </div>
-        </div>
-    </div>
+    </section>
+</div>
 
     <!-- Bottom-load all JavaScript dependencies -->
     <script src="/static/js/jquery.min.js"></script>
