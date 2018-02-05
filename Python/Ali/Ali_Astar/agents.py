@@ -51,7 +51,7 @@ class commuterAgent(Agent):
             position = cost_pos_list[k][1]
             density = get_commuters_density(self, self.vision_range, position)
             cost_pos_list[k] = (cost_pos_list[k][0] +\
-             (self.density_coefficent * density / math.pow( 2 * self.vision_range + 1,2))  , cost_pos_list[k][1])
+             (self.density_coefficent * density / math.pow( 2 * (self.vision_range + 1 ) + 1,2))  , cost_pos_list[k][1])
 
         neighbor_list = self.model.grid.get_neighbors(self.pos, True, False, 1)
 

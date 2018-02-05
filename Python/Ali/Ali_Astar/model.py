@@ -18,7 +18,7 @@ class Model(Model):
     '''
     ClubLife, an agent-based-model to simulate club related behaviour.
     '''
-    def __init__(self, N, width, height,distance_coefficent= 1 ,density_coefficent=1000 ,density_vision=5):
+    def __init__(self, N, width, height,distance_coefficent= 1 ,density_coefficent= 162*5 ,density_vision=3):
         super().__init__()
 
         self.max_Astar = 0
