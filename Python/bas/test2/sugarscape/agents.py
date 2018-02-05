@@ -25,6 +25,7 @@ class SsAgent(Agent):
         self.sugar = sugar
         self.metabolism = metabolism
         self.vision = vision
+        self.wealth = 1
 
     def get_sugar(self, pos):
         this_cell = self.model.grid.get_cell_list_contents([pos])
@@ -70,6 +71,7 @@ class Sugar(Agent):
         super().__init__(pos, model)
         self.amount = max_sugar
         self.max_sugar = max_sugar
+        self.wealth = 1
 
     def step(self):
         self.amount = min([self.max_sugar, self.amount + 1])

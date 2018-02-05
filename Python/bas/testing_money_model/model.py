@@ -1,19 +1,21 @@
 # model.py
 import random
 import numpy as np
-from mesa import Agent, Model
-from mesa.time import RandomActivation
-from mesa.space import MultiGrid
-from mesa.datacollection import DataCollector
-from mesa.batchrunner import BatchRunner
+from mesa_own import Agent, Model
+from mesa_own.time import RandomActivation
+from mesa_own.space import MultiGrid
+from mesa_own.datacollection import DataCollector
+from mesa_own.batchrunner import BatchRunner
 
-from mesa.visualization.ModularVisualization import VisualizationElement
+from mesa_own.visualization.ModularVisualization import VisualizationElement
 
 def compute_gini(model):
     agent_wealths = [agent.wealth for agent in model.schedule.agents]
     x = sorted(agent_wealths)
     N = model.num_agents
     B = sum(xi * (N - i) for i, xi in enumerate(x)) / (N * sum(x))
+    print("&&*&*&(*(&*((&(*(")
+    print(x, N, B, (1 + (1/N) - 2*B))
     return (1 + (1/N) - 2*B)
 
 
@@ -88,5 +90,8 @@ class HistogramModule(VisualizationElement):
 
     def render(self, model):
         wealth_vals = [agent.wealth for agent in model.schedule.agents]
+        print(wealth_vals)
         hist = np.histogram(wealth_vals, bins=self.bins)[0]
+        print(hist)
+        print([int(x) for x in hist])
         return [int(x) for x in hist]

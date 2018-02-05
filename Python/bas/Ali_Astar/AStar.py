@@ -1,5 +1,8 @@
 from agents import *
 import numpy as np
+from pprint import pprint
+
+
 
 def get_neighbours(cost_list,pos):
 
@@ -67,17 +70,19 @@ def A_star_array(grid_width,grid_height, location_point, blocks, distance_coeffi
     node_list = []
     check_list = []
     
-    cost_list  = np.zeros([50,50])
+    cost_list  = [ [-1 for i in range(grid_width)] for j in range(grid_height) ]
     
     for block_pos in blocks:
-        cost_list[block_pos[0]][block_pos[1]] = 10000000000
+        cost_list[block_pos[0]][block_pos[1]] = 10000
+   
+
 
     cost_list[pos[0]][pos[1]] = 0
 
     node_list.append((pos, 0))
     check_list.append(pos)
 
-    neighbor_positions = get_neighbours(cost_list,pos)
+   
 
 
     while(True):
@@ -90,18 +95,20 @@ def A_star_array(grid_width,grid_height, location_point, blocks, distance_coeffi
         
         neighbor_positions = get_neighbours(cost_list,pos)
 
-        for pos in neighbor_positions:
+        for ps in neighbor_positions:
 
             
-            if (pos not in blocks) and (pos not in check_list):
+            if (ps not in blocks) and (ps not in check_list):
 
-                check_list.append(pos)
-                node_list.append((pos, m_range+1))
+                check_list.append(ps)
+                node_list.append((ps, m_range+1))
 
-            dist = get_distance(location_point, pos)
-            cost_list[pos[0]][pos[1]] = (m_range_coefficent * m_range) + (distance_coefficent * dist)
+        
+        dist = get_distance(location_point, pos)
+        cost_list[pos[0]][pos[1]] = (m_range_coefficent * m_range) + (distance_coefficent * dist)
 
         if len(node_list) == 0:
+    
             return cost_list
 
 

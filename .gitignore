@@ -5,3 +5,8 @@ Python/.DS_Store
 
 *.pyc
 Python/.DS_Store
+Python/bas/Ali_Astar/model.py
+.DS_Store
+Python/Ali/__pycache__/model.cpython-36.pyc
+Python/Ali/__pycache__/server.cpython-36.pyc
+Python/Ali/agents.py

@@ -3,7 +3,7 @@ from model import compute_gini
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas
-from mesa.batchrunner import BatchRunner
+from mesa_own.batchrunner import BatchRunner
 from server import server
 
 server.port = 8521
