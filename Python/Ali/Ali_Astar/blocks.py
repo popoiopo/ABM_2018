@@ -65,18 +65,18 @@ def create_POI(self,location_list,moore_range):
 block_positions = []
 
 block_list =[\
+]
 
-
-[(20 + i, 5) for i in range(15)],
-[(20, 11), (20, 12), (20, 13), (20, 14)],
-[(20 + i, 20) for i in range(10)],
-[(20, 41), (20, 42), (20, 43), (20, 44)],
-[(25, 20 + i) for i in range(10)],
-[(25, 10 + i) for i in range(10)],
-[(10, 0 + i) for i in range(10)],
-[(0 + i, 30) for i in range(10)],
- [(2 + i, 36) for i in range(30)],
- [(2+i, 34) for i in range(48)]]
+# [(20 + i, 5) for i in range(15)],
+# [(20, 11), (20, 12), (20, 13), (20, 14)],
+# [(20 + i, 20) for i in range(10)],
+# [(20, 41), (20, 42), (20, 43), (20, 44)],
+# [(25, 20 + i) for i in range(10)],
+# [(25, 10 + i) for i in range(10)],
+# [(10, 0 + i) for i in range(10)],
+# [(0 + i, 30) for i in range(10)],
+ #[(2 + i, 36) for i in range(30)],
+ #[(2+i, 34) for i in range(48)]]
 
 
 
