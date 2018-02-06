@@ -13,7 +13,8 @@ import seaborn as sns
 
 fixed_params = {"N": 750, "beta_c" : 1.9, "beta_d" : 1, "beta_w" : 0.5, "beer_consumption" : 0.0008333, "serving_speed" : 0.1, "height" : 34, "width" : 18}
 
-variable_params = {"bar1_y": range(1, 33, 2), "bar2_y": range(1, 33, 2)}
+variable_params = {"bar1_y": range(1, 33, 1)}
+#variable_params = {"bar1_y": range(1, 33, 1), "bar2_y": range(1, 33, 1)}
 
 batch_run = BatchRunner(Sugarscape2ConstantGrowback,
                         fixed_parameters=fixed_params,
@@ -29,13 +30,15 @@ print(run_data)
 
 # Plot Results
 plt.figure()
-dataC = run_data[['bar1_y', 'bar2_y', 'MaxAgents']]
-dataC = dataC.pivot(index='bar1_y', columns='bar2_y', values='MaxAgents')
-sns.heatmap(dataC)
+plt.plot(run_data['bar1_y'], run_data['MaxAgents'])
+#dataC = run_data[['bar1_y', 'bar2_y', 'MaxAgents']]
+#dataC = dataC.pivot(index='bar1_y', columns='bar2_y', values='MaxAgents')
+#sns.heatmap(dataC)
 plt.savefig("DataCrowd")
 plt.figure()
-dataW = run_data[['bar1_y', 'bar2_y', 'Waiting']]
-dataW = dataW.pivot(index='bar1_y', columns='bar2_y', values='Waiting')
-sns.heatmap(dataW)
+plt.plot(run_data['bar1_y'], run_data['Waiting'])
+#dataW = run_data[['bar1_y', 'bar2_y', 'Waiting']]
+#dataW = dataW.pivot(index='bar1_y', columns='bar2_y', values='Waiting')
+#sns.heatmap(dataW)
 plt.savefig("DataWaiting")
 plt.show()

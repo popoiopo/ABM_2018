@@ -1,8 +1,0 @@
-# name lower_bound upper_bound
-N 500 750
-beta_c 1.7 2.5
-beta_d 0.5 1.5
-beta_w 0.0 1.0
-serving_speed 0.5 2.0
-bar1_y 0 33
-bar2_y 0 33

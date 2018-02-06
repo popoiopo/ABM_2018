@@ -26,7 +26,7 @@ class Sugarscape2ConstantGrowback(Model):
 
     verbose = True  # Print-monitoring
 
-    def __init__(self, N, beta_c, beta_d, beta_w, beer_consumption, serving_speed, height=34, width=18, bar1_y = 5 , bar2_y = 6, stage = (9, 33)):
+    def __init__(self, N, beta_c, beta_d, beta_w, beer_consumption, serving_speed, height=34, width=18, bar1_y = 1 , bar2_y = 32, stage = (9, 33)):
         '''
         Create a new Constant Growback model with the given parameters.
 
@@ -70,6 +70,7 @@ class Sugarscape2ConstantGrowback(Model):
             #x = random.randrange(self.width)
             #y = random.randrange(self.height)
             
+            # Start position of agents at bottom of 'club'
             x = 7 + int(5*np.random.random())
             y = 0
             vision = 2
@@ -78,7 +79,6 @@ class Sugarscape2ConstantGrowback(Model):
             self.schedule.add(ssa)
         
         
-        # sugar_distribution = np.genfromtxt("sugarscape/sugar-map.txt")
         sugar_distribution = np.zeros([self.width,self.height])
         for x in range(self.width):
             for y in range(self.height):
@@ -93,6 +93,8 @@ class Sugarscape2ConstantGrowback(Model):
         self.running = True
 
     def WaitingTime(self, bar):
+        
+        # Calculate crowd (and thus waiting time) in front of a bar every model interation to decrease computational cost.
         busy = 0
         (x,y) = bar
         for dx in range(-4,5):
@@ -107,6 +109,8 @@ class Sugarscape2ConstantGrowback(Model):
 
     def step(self):
         self.WaitingTimes = []
+        
+        # Calculate bar crowds per bar.
         self.bar1crowd = self.WaitingTime(self.bar1)
         self.bar2crowd = self.WaitingTime(self.bar2)
         self.bar3crowd = self.WaitingTime(self.bar3)

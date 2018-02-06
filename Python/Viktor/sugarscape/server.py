@@ -24,6 +24,8 @@ def SsAgent_portrayal(agent):
         portrayal["Layer"] = 1
 
     elif type(agent) is Sugar:
+        
+        # Color background "sugar" agents according to amount of agents in the grid cell.
         if 1 < agent.amount < 6:
             portrayal["Color"] = color_dic[int(agent.amount)]
         elif agent.amount > 4:
@@ -38,6 +40,8 @@ def SsAgent_portrayal(agent):
 
     return portrayal
 
+
+# The model is adjustable on the server.
 n_slider = UserSettableParameter("slider", "Number of agents", 750, 1, 1500, 1)
 beta_c = UserSettableParameter("slider", "Beta Crowd Penalty", 1.9, 0, 5, 0.1)        # Crowd
 beta_d = UserSettableParameter("slider", "Beta Distance Penalty", 1, 0, 5, 0.1)        # Distance

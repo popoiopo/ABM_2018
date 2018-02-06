@@ -81,6 +81,8 @@ class RandomActivationByBreed(RandomActivation):
 
 
     def AverageWaitingTime(self, integral):
+        
+        # Calculate the average waiting time over all agents during all time steps of the model.
         WT = sum(self.model.WaitingTimes)/(len(self.model.WaitingTimes)+1)
         self.IntegralWT.append(WT)
         
