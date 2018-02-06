@@ -26,7 +26,7 @@ class Sugarscape2ConstantGrowback(Model):
 
     verbose = True  # Print-monitoring
 
-    def __init__(self, N, beta_c, beta_d, beta_w, beer_consumption, serving_speed, height=34, width=18, bar1_y = 21 , bar2_y = 21, stage = (9, 33)):
+    def __init__(self, N, beta_c, beta_d, beta_w, beer_consumption, serving_speed, height=34, width=18, bar1_y = 5 , bar2_y = 6, stage = (9, 33)):
         '''
         Create a new Constant Growback model with the given parameters.
 

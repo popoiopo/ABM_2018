@@ -20,7 +20,7 @@ def get_distance(pos_1, pos_2):
 
 
 class SsAgent(Agent):
-    def __init__(self, pos, model, beta_c, beta_d, beta_w, beer_consumption, serving_speed, moore=True, vision=2, beer = False, waiting = 0):
+    def __init__(self, pos, model, beta_c, beta_d, beta_w, beer_consumption, serving_speed, moore=True, vision=2, beer = False):
 
         super().__init__(pos, model)
         self.pos = pos
@@ -34,7 +34,7 @@ class SsAgent(Agent):
         self.beta_c = beta_c        # Crowd
         self.beta_d = beta_d        # Distance
         self.beta_w = beta_w        # Waiting time
-        self.waiting = waiting
+        self.waiting = 0
         self.helped = 0
         self.Que = 0
         self.InQue = False
@@ -121,6 +121,7 @@ class SsAgent(Agent):
 
         (x,y) = self.pos
         
+        abc = False
         
         (b1x, b1y) = self.model.bar1
         (b2x, b2y) = self.model.bar2
@@ -140,10 +141,10 @@ class SsAgent(Agent):
         
 
         
-        if abs(x-b1x)*abs(x-b2x)*abs(x-b3x)*abs(x-b4x) == 0 and abs(y-b1y)*abs(y-b2y)*abs(y-b3y)*abs(y-b4y) == 0 and self.beer == True:
+        if self.beer == True and abs(x-b1x)*abs(x-b2x)*abs(x-b3x)*abs(x-b4x) < 10 and abs(y-b1y)*abs(y-b2y)*abs(y-b3y)*abs(y-b4y) < 10:
             self.helped += S*self.serving_speed/(len(self.model.grid.get_cell_list_contents([self.pos]))-1)
             if self.helped >= 1.0:
-                self.beer_need = 0
+                self.beer_need = 0.0
                 self.beer = False
                 self.InQue = True
                 self.waiting = 0
@@ -154,7 +155,7 @@ class SsAgent(Agent):
         if self.is_occupied(self.pos, True) > 7:
             self.vision = 1
         else:
-            self.vision = 1
+            self.vision = 2
         
         
         if self.beer == True:
@@ -167,7 +168,10 @@ class SsAgent(Agent):
             self.InQue =  False
             self.Que = 0
         
-        self.model.WaitingTimes.append(self.waiting)
+        if self.waiting != 0:
+            self.model.WaitingTimes.append(self.waiting)
+        
+        
         
         
         scores = []
@@ -177,9 +181,11 @@ class SsAgent(Agent):
             for dy in range(-self.vision, self.vision+1):
                 if 0 <= (x+dx) < self.model.width and 0 <= (y+dy) < self.model.height:
                     pos = (x+dx, y+dy)
-                    if self.beer ==  True or len(self.model.grid.get_cell_list_contents([pos])) < 4 or self.Que > 0:
+                    if self.Que > 0 or len(self.model.grid.get_cell_list_contents([pos])) < 3 or (self.beer ==  True and len(self.model.grid.get_cell_list_contents([pos])) < 5):
                         around.append(pos)
-                        if dx == 0 and dy == 0:
+                        if (self.beer and self.helped == 0) or self.InQue:
+                            scores.append(self.score2(pos, center=False))
+                        elif dx == 0 and dy == 0:
                             scores.append(self.score2(pos, center=True))
                         else:
                             scores.append(self.score2(pos, center=False))
@@ -187,7 +193,7 @@ class SsAgent(Agent):
 
         if len(scores) < 1:
             self.model.grid.move_agent(self, self.pos)
-
+        
         else:
             best_pos = around[np.argmin(scores)]
             self.model.grid.move_agent(self, best_pos)

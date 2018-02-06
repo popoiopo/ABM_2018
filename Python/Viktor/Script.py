@@ -16,7 +16,6 @@ def evaluate(values):
     for i, X in enumerate(values):
 
         fixed_params = {"N" : int(X[0]), "beta_d" : X[2], "beta_w" : X[3], "beer_consumption" : 0.0008333, "serving_speed" :X[4], "height" : 34, "width" : 18, "bar1_y": int(X[5]), "bar2_y" : int(X[6])}
-        print(X[0])
         variable_params = {"beta_c": np.linspace(X[1],3.0,1)}
      
         batch_run = BatchRunner(Sugarscape2ConstantGrowback, fixed_parameters=fixed_params,     variable_parameters = variable_params, iterations=1, max_steps=1800, model_reporters={"Waiting": lambda m: m.schedule.AverageWaitingTime(True), "MaxAgents": lambda m: m.schedule.MaxAgents()})

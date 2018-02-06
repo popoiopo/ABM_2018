@@ -10,12 +10,10 @@ from Script import evaluate
 
 problem = {'names': ['N' , 'beta_c', 'beta_d', 'beta_w', 'serving_speed', 'bar1_y', 'bar2_y'],
     'num_vars': 7,
-        'bounds': [[500, 750], [1.3, 2.5], [0.5, 1.5], [0.0, 1.0], [0.5, 2.0], [0, 33], [0, 33]]}
-#problem = read_param_file('Values6.txt')
-
+        'bounds': [[500, 750], [1.2, 2.5], [0.5, 1.5], [0.0, 1.0], [0.05, 0.5], [0, 33], [0, 33]]}
 
 # Generate samples
-param_values = saltelli.sample(problem, 5)
+param_values = saltelli.sample(problem, 16)
 
 # Run model (example)
 Y, Z = evaluate(param_values)
