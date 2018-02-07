@@ -55,9 +55,9 @@ def A_star_array(grid_width, grid_height, location_point, blocks, distance_coeff
     check_list = []
 
     cost_list = [[-1 for i in range(grid_width)] for j in range(grid_height)]
-
+    print("test")
     for block_pos in blocks:
-        cost_list[block_pos[0]][block_pos[1]] = 10000
+        cost_list[block_pos[0]][block_pos[1]] = -1
 
     cost_list[pos[0]][pos[1]] = 0
 

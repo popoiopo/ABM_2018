@@ -9,12 +9,12 @@ import random
 import numpy as np
 
 from ClubLife.agents import *
-from ClubLife.AStar import *
-from ClubLife.blocks import *
+from ClubLife.AStar_viz_Astar import *
+from ClubLife.blocks_viz_Astar import *
 
 
 # ------------------Classes--------------------------
-class Model(Model):
+class m_Model(Model):
     '''
     ClubLife, an agent-based-model to simulate club related behaviour.
     '''
@@ -31,15 +31,8 @@ class Model(Model):
 
         self.serving_time = {'BAR': 3, 'BAR2': 3, 'BAR3': 3, 'BAR4': 3}
 
-        # POI_points = [ (24, 49),(40, 7), (5, 7) ]
-        # POI_names = ['STAGE', 'BAR', 'BAR2']
-
-        # testing
         POI_points = [(24, 49), (24, 1)]
         POI_names = ['STAGE', 'BAR']
-
-        # POI_points = [ (9, 33),(0, 5), (17, 5), (0,7),(17,7)]
-        # POI_names = [ 'STAGE,'BAR1', 'BAR2','BAR3','BAR4']
 
         POI_dict = {}
         for i in range(len(POI_points)):
@@ -61,8 +54,7 @@ class Model(Model):
             y = POI_points[r][1]
 
             A_star_node(self, (x, y), POI_names[r], self.blocks, 0.5, 2)
-            self.POI_cost[POI_names[r]] =\
-              A_star_array(width, height, (x, y), self.blocks, distance_coefficent, 1)
+            self.POI_cost[POI_names[r]] = A_star_array(width, height, (x, y), self.blocks, distance_coefficent, 1)
 
         commuters_list = []
         for k in range(self.num_agents):
@@ -81,25 +73,16 @@ class Model(Model):
 
                 x = random.randrange(self.grid.width)
                 y = random.randrange(self.grid.height)
-                # x = 24
-                # y = 1
 
                 this_cell = self.grid.get_cell_list_contents((x, y))
 
                 if (x, y) not in self.blocks and (x, y) not in selected_cells:
 
                     selected_cells.append((x, y))
-                # for agent in this_cell:
-
-                #     if type(agent) is nodeAgent:
-                #         if (agent.block is False):
-                #             notblock = True
                     break
 
             self.grid_density[x][y] += 1
             self.grid.place_agent(commuter, (24, 1))
-            # self.grid.place_agent(commuter, (24, 49))
-            # self.grid.place_agent(commuter, (x, y))
 
         self.datacollector = DataCollector(
             agent_reporters={"utility": lambda a: a.utility, 'numOfPOIVisits': lambda a: a.numOfPOIVisits})
