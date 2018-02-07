@@ -3,6 +3,16 @@ import math
 
 
 def get_distance(pos_1, pos_2):
+    """
+    This function calculates the euclidean distance between two points
+
+    Args:
+        pos_1 := the coordinates of starting point in the form (x,y)
+        pos_2 := the coordinates of destination point in the form (x,y)
+
+    Returns:
+        The Euclidean ditance between pos_1 and pos_2
+    """
 
     x1, y1 = pos_1
     x2, y2 = pos_2

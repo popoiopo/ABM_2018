@@ -5,6 +5,13 @@ from ClubLife.model_viz_Astar import *
 # ------------------Functions--------------------------
 
 def create_block(self, location_list, POI_locations):
+    """
+    This function takes a list of coordinates, and creates node agents of type block
+    Args:
+        locations_list :=   the list of block coordinates
+        POI_locations :=    the model's dictionry that includes POI_names and their cooridantes 
+    """
+
 
     for i in range(len(location_list)):
         this_cell = self.grid.get_cell_list_contents(location_list[i])
@@ -18,6 +25,15 @@ def create_block(self, location_list, POI_locations):
 
 
 def create_POI(self, location_list, moore_range):
+    """
+    This function takes a list of coordinates, and creates node agents of type  POI
+    Args:
+        locations_list :=   the list of POI coordinates
+        moore_range := the moore_range for creating POIS
+         (the range to add POIs around each coordinates in the location_list)
+    """
+
+
     for r in range(len(location_list)):
 
         x = location_list[r][0]

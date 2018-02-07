@@ -6,7 +6,25 @@ from ClubLife_no_walls.actions import *
 
 # ------------------Classes--------------------------
 class commuterAgent(Agent):
-    """ An agent with fixed initial wealth."""
+    """ This class model the commuter agents behaviors
+
+    Attributes:
+        state: the current state of the agent 
+        layer: the current layer of agent
+        WAITING_TIME_AT_POI: a counter that tracks the number of steps an agent waiting at a serviceable POI
+        density_coefficent: defines the intensity or the preference of the agent in crowd avoidance
+        vision_range: defines the Moore-range that agents are able to observe their environment
+        POI_dict: A dictionary that holds the POI_names and their cooridnates
+        shortest_time: it stores the shortest number of timesteps from the current poistion of the agent to
+        its assigned POI
+        total_waiting: tracks the number of timesteps  the agent spends upon its decision to move toward a POI
+        unitl it reaches its POI
+        numOfPOIVisits: stores the number of times agents visied serviceable POIs
+        utility: stores the accumulated utility of the agents, as a value between 0-1, where 1 means that the agent
+        visited their serviceable POIs within the shortest amount of time possible (calculated by A_star)
+        util: used for sending utility value to Javascript function for visualization
+
+    """
     def __init__(self, unique_id, model, POI_dict, density_coefficent, vision_range):
         super().__init__(unique_id, model)
 

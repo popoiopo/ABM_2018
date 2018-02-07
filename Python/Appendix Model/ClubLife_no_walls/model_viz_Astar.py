@@ -15,9 +15,17 @@ from ClubLife_no_walls.blocks import *
 
 # ------------------Classes--------------------------
 class Model(Model):
-    '''
-    ClubLife, an agent-based-model to simulate club related behaviour.
-    '''
+  """ This class is the main model which inherits the Model class in Mesa   
+
+    Attributes:
+        max_Astar:= maximum value of cost from A_star algorithm, used for visualization
+        num_agents:= total number of agents
+        POI_cost:= a dictionary where the keys hold the POI_names and the values are a 2D arrary holding 
+        the cost value of reaching to that POI 
+        grid_density:= a 2D arrary that stores the number of agents in each cell of the grid, and 
+        is updated within every movement of the agents.
+        service_time:= stores the service time at the servicable POIs 
+    """
     def __init__(self, N, width, height, distance_coefficent=0, density_coefficent=10, density_vision=3):
         super().__init__
 
@@ -93,6 +101,13 @@ class Model(Model):
 
 
 class ChartModule(VisualizationElement):
+    """ This class is used for chart visualization
+
+    Attributes:
+        canvas_height 
+        canvas_width 
+        WaitingTime
+    """
     package_includes = ["Chart.min.js"]
     local_includes = ["js/LineChartModule.js"]
 
@@ -116,6 +131,13 @@ class ChartModule(VisualizationElement):
 
 
 class ChartModuleUtil(VisualizationElement):
+    """ This class is used for chart visualization
+
+    Attributes:
+        canvas_height 
+        canvas_width 
+        utility
+    """
     package_includes = ["Chart.min.js"]
     local_includes = ["js/LineChartModuleUtil.js"]
 
@@ -135,6 +157,13 @@ class ChartModuleUtil(VisualizationElement):
 
 
 class HistogramModule(VisualizationElement):
+    """ This class is used for histogram visualization
+
+    Attributes:
+        canvas_height 
+        canvas_width 
+        bins
+    """
     package_includes = ["Chart.min.js"]
     local_includes = ["js/HistogramModule.js"]
 

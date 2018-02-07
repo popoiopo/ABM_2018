@@ -6,6 +6,28 @@ from ClubLife.actions import *
 
 # ------------------Classes--------------------------
 class commuterAgent(Agent):
+    """ This class model the commuter agents behaviors
+
+    Attributes:
+        state: the current state of the agent 
+        layer: the current layer of agent
+        WAITING_TIME_AT_POI: a counter that tracks the number of steps an agent waiting at a serviceable POI
+        density_coefficent: defines the intensity or the preference of the agent in crowd avoidance
+        vision_range: defines the Moore-range that agents are able to observe their environment
+        POI_dict: A dictionary that holds the POI_names and their cooridnates
+        shortest_time: it stores the shortest number of timesteps from the current poistion of the agent to
+        its assigned POI
+        total_waiting: tracks the number of timesteps  the agent spends upon its decision to move toward a POI
+        unitl it reaches its POI
+        numOfPOIVisits: stores the number of times agents visied serviceable POIs
+        utility: stores the accumulated utility of the agents, as a value between 0-1, where 1 means that the agent
+        visited their serviceable POIs within the shortest amount of time possible (calculated by A_star)
+        util: used for sending utility value to Javascript function for visualization
+
+    """
+
+
+
     """ An agent with fixed initial wealth."""
     def __init__(self, unique_id, model, POI_dict, density_coefficent, vision_range):
         super().__init__(unique_id, model)
@@ -27,6 +49,14 @@ class commuterAgent(Agent):
         self.util = 0
 
     def move(self, destination):
+         """
+        This functions take a POI point as the destinaion of the agent, finds the best candidate for the next agents
+        movement based on the current crowd density around the agent and the cost of path pre calcuated by A_star function 
+
+    Args:
+        destination := the coordinates of the agents destination (x,y)
+        """
+
 
         possible_steps = self.model.grid.get_neighborhood(
             self.pos,
@@ -77,6 +107,15 @@ class commuterAgent(Agent):
 
 
 class nodeAgent(Agent):
+    """ This class model the node agents that could be either of type POI or  a block
+
+    Attributes:
+        locations: the coordinates of the agnet
+        block:  it determines whether hte agent is of type block (an impassble cell)
+        POI:  it determines whether hte agent is of type  POI
+    """
+
+
     def __init__(self, pos, model, location_list):
         super().__init__(pos, model)
         self.locations = {}
@@ -91,6 +130,18 @@ class nodeAgent(Agent):
 
 # ------------------Functions--------------------------
 def get_commuters_density(self, moore_range, position):
+
+     """
+    This function calculates the crowd density of the agent within its  moore_range neigbourhood
+
+    Args:
+        moore_range :=  defines the range of vision
+        position :=  the current poistion of the agent
+
+    Returns:
+        The number of agents within the given moore_range in the neighbourhood of the function
+    """
+
 
     x = position[0]
     y = position[1]

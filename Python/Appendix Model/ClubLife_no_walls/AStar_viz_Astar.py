@@ -2,6 +2,17 @@ from ClubLife_no_walls.agents import *
 
 
 def get_neighbours(cost_list, pos):
+    """
+    This function takes the current_postion, and a 2D array with the same dimension as the grid's
+    and returns the coordinates of the agent's neighbouring cells
+
+    Args:
+        cost_list :=  a 2D array with the same dimension as the grid's
+        pos := the current position of the agent 
+
+    Returns:
+        the list of the coordinates of the agent's neighbouring cells
+    """
 
     x = pos[0]
     y = pos[1]
@@ -49,6 +60,21 @@ def get_neighbours(cost_list, pos):
 
 
 def A_star_array(grid_width, grid_height, location_point, blocks, distance_coefficent=0, m_range_coefficent=1):
+    """
+    This function calculates the cost of reaching to a POI from every other cells in the grid, and stores the 
+    result within a 2D array accesible by every agent.
+
+    Args:
+        grid_width :=   the width of the grid
+        grid_height :=  the height of the grid
+        location_point :=  the cooridnate of the POI
+        blocks := the list of cooridnates of the blocks
+        distance_coefficent := the coefficent of euclidean distance
+        m_range_coefficent :=  the coeffenit  of dikstra cost
+
+    Returns:
+        a 2D array, where each cell stores the cost of moving to the given POI
+    """
 
     pos = location_point
     node_list = []
@@ -90,6 +116,19 @@ def A_star_array(grid_width, grid_height, location_point, blocks, distance_coeff
 
 
 def A_star_node(self, location_point, location_name, blocks, distance_coefficent, m_range_coefficent):
+    """
+    This function calculates the cost of reaching to a POI from every other cells in the grid, and stores the 
+    result within the node agents, this function is used for visualization purposes.
+    Args:
+        grid_width :=   the width of the grid
+        grid_height :=  the height of the grid
+        location_point :=  the cooridnate of the POI
+        blocks := the list of cooridnates of the blocks
+        distance_coefficent := the coefficent of euclidean distance
+        m_range_coefficent :=  the coeffenit  of dikstra cost
+
+    """
+
 
     pos = location_point
     node_list = []
